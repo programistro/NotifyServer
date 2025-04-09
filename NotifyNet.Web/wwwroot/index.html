@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Notification Hub</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .connection-status {
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .connected {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .disconnected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .notification-section {
+            margin-bottom: 30px;
+        }
+
+        .notification {
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #3498db;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .notification.created {
+            border-left-color: #28a745;
+        }
+
+        .notification.updated {
+            border-left-color: #ffc107;
+        }
+
+        .notification.deleted {
+            border-left-color: #dc3545;
+        }
+
+        .notification h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        .notification pre {
+            background-color: white;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .timestamp {
+            font-size: 0.8em;
+            color: #7f8c8d;
+            text-align: right;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .btn-connect {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-disconnect {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .order-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .order-property {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .order-property strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Order Notification Hub</h1>
+
+    <div id="connectionStatus" class="connection-status disconnected">
+        Disconnected from Hub
+    </div>
+
+    <div>
+        <button id="connectButton" class="btn btn-connect">Connect</button>
+        <button id="disconnectButton" class="btn btn-disconnect" disabled>Disconnect</button>
+    </div>
+
+    <div class="notification-section">
+        <h2>Notifications</h2>
+        <div id="notificationsContainer"></div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.11/signalr.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const connectionStatus = document.getElementById('connectionStatus');
+        const connectButton = document.getElementById('connectButton');
+        const disconnectButton = document.getElementById('disconnectButton');
+        const notificationsContainer = document.getElementById('notificationsContainer');
+
+        // Create SignalR connection
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/orderHub")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        // Connection event handlers
+        connection.onclose(() => {
+            updateConnectionStatus(false);
+            setTimeout(() => startConnection(), 5000); // Try to reconnect after 5 seconds
+        });
+
+        // Hub methods
+        connection.on("OrderCreated", (order) => {
+            addNotification('Order Created', order, 'created');
+        });
+
+        connection.on("OrderUpdated", (order) => {
+            addNotification('Order Updated', order, 'updated');
+        });
+
+        connection.on("OrderDeleted", (orderId) => {
+            addNotification('Order Deleted', { orderId }, 'deleted');
+        });
+
+        // Button event listeners
+        connectButton.addEventListener('click', () => startConnection());
+        disconnectButton.addEventListener('click', () => connection.stop());
+
+        // Start the connection
+        startConnection();
+
+        function startConnection() {
+            connection.start()
+                .then(() => updateConnectionStatus(true))
+                .catch(err => {
+                    console.error('Connection failed: ', err);
+                    updateConnectionStatus(false);
+                });
+        }
+
+        function updateConnectionStatus(isConnected) {
+            if (isConnected) {
+                connectionStatus.textContent = "Connected to Hub";
+                connectionStatus.className = "connection-status connected";
+                connectButton.disabled = true;
+                disconnectButton.disabled = false;
+            } else {
+                connectionStatus.textContent = "Disconnected from Hub";
+                connectionStatus.className = "connection-status disconnected";
+                connectButton.disabled = false;
+                disconnectButton.disabled = true;
+            }
+        }
+
+        function addNotification(title, data, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+
+            const now = new Date();
+            const timestamp = now.toLocaleTimeString() + ' ' + now.toLocaleDateString();
+
+            notification.innerHTML = `
+                    <h3>${title}</h3>
+                    <div class="timestamp">${timestamp}</div>
+                    <div class="order-details">${formatOrderData(data)}</div>
+                `;
+
+            notificationsContainer.prepend(notification);
+        }
+
+        function formatOrderData(data) {
+            if (!data) return '<pre>No data</pre>';
+
+            if (data.orderId) {
+                return `
+                        <div class="order-property">
+                            <strong>Order ID:</strong>
+                            <span>${data.orderId}</span>
+                        </div>
+                    `;
+            }
+
+            let html = '';
+            for (const [key, value] of Object.entries(data)) {
+                if (value === null || value === undefined) continue;
+
+                html += `
+                        <div class="order-property">
+                            <strong>${formatPropertyName(key)}:</strong>
+                            <span>${formatValue(value)}</span>
+                        </div>
+                    `;
+            }
+
+            return html;
+        }
+
+        function formatPropertyName(name) {
+            // Convert camelCase to normal text
+            return name
+                .replace(/([A-Z])/g, ' $1')
+                .replace(/^./, str => str.toUpperCase())
+                .replace('Id', 'ID');
+        }
+
+        function formatValue(value) {
+            if (value === null || value === undefined) return 'N/A';
+            if (typeof value === 'object') return JSON.stringify(value, null, 2);
+            if (typeof value === 'string' && Date.parse(value)) {
+                const date = new Date(value);
+                return date.toLocaleString();
+            }
+            return value;
+        }
+    });
+</script>
+</body>
+</html>
