@@ -1,9 +1,11 @@
 ﻿using AXO.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using NotifyNet.Core.Dto;
 
 namespace NotifyNet.Web.Hubs;
 
+[Authorize]
 public class OrderHub : Hub
 {
     public async Task NotifyOrderCreated(OrderDto order)
