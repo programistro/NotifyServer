@@ -1,12 +1,14 @@
-﻿namespace Notify.App;
+﻿using Notify.App.Platforms.Android;
 
+namespace Notify.App;
+
+//todo add https://github.com/dotnet/maui-samples/tree/main/9.0/PlatformIntegration/LocalNotificationsDemo
 public partial class MainPage : ContentPage
 {
     int count = 0;
 
     INotificationManagerService notificationManager;
     int notificationNumber = 0;
-
 
     public MainPage(INotificationManagerService manager)
     {
@@ -18,7 +20,33 @@ public partial class MainPage : ContentPage
             var eventData = (NotificationEventArgs)eventArgs;
             ShowNotification(eventData.Title, eventData.Message);
         };
+
+        // Send
+        notificationManager.SendNotification("w", "w");
+
+        // Scheduled send
+        notificationManager.SendNotification("Notification title goes here", "Notification messages goes here.", DateTime.Now.AddSeconds(10));
+
+        // Receive
+        notificationManager.NotificationReceived += (sender, eventArgs) =>
+        {
+            var eventData = (NotificationEventArgs)eventArgs;
+
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                // Take required action in the app once the notification has been received.
+            });
+        };
     }
+
+#if ANDROID
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        PermissionStatus status = await Permissions.RequestAsync<NotificationPermission>();
+    }
+#endif
 
     private void OnCounterClicked(object sender, EventArgs e)
     {
