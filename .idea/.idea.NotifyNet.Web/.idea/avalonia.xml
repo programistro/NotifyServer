@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="NotifyNet.App/NotifyNet.App/App.axaml" value="NotifyNet.App/NotifyNet.App.Browser/NotifyNet.App.Browser.csproj" />
+        <entry key="NotifyNet.App/NotifyNet.App/Views/LoginView.axaml" value="NotifyNet.App/NotifyNet.App.Browser/NotifyNet.App.Browser.csproj" />
+        <entry key="NotifyNet.App/NotifyNet.App/Views/MainView.axaml" value="NotifyNet.App/NotifyNet.App.Browser/NotifyNet.App.Browser.csproj" />
+        <entry key="NotifyNet.App/NotifyNet.App/Views/MainWindow.axaml" value="NotifyNet.App/NotifyNet.App.Browser/NotifyNet.App.Browser.csproj" />
+      </map>
+    </option>
+  </component>
+</project>
