@@ -1,7 +1,7 @@
 ﻿using Foundation;
 using UserNotifications;
 
-namespace Notify.App.Platforms.MacCatalyst;
+namespace LocalNotificationsDemo.Platforms.iOS;
 
 public class NotificationManagerService : INotificationManagerService
 {
@@ -13,7 +13,7 @@ public class NotificationManagerService : INotificationManagerService
     public NotificationManagerService()
     {
         // Create a UNUserNotificationCenterDelegate to handle incoming messages.
-        UNUserNotificationCenter.Current.Delegate = new NotificationReceiver();
+        UNUserNotificationCenter.Current.Delegate = new LocalNotificationsDemo.Platforms.iOS.NotificationReceiver();
 
         // Request permission to use local notifications.
         UNUserNotificationCenter.Current.RequestAuthorization(UNAuthorizationOptions.Alert, (approved, err) =>

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotifyNet.Application", "No
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notify.App", "Notify.App\Notify.App.csproj", "{E44E7AA9-90BE-49B7-B6F8-493FCC6E6AA2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalNotificationsDemo", "LocalNotificationsDemo\LocalNotificationsDemo.csproj", "{0A8B2013-7D1C-4B3A-B6EF-F99117771980}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,5 +43,9 @@ Global
 		{E44E7AA9-90BE-49B7-B6F8-493FCC6E6AA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E44E7AA9-90BE-49B7-B6F8-493FCC6E6AA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E44E7AA9-90BE-49B7-B6F8-493FCC6E6AA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A8B2013-7D1C-4B3A-B6EF-F99117771980}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A8B2013-7D1C-4B3A-B6EF-F99117771980}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A8B2013-7D1C-4B3A-B6EF-F99117771980}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A8B2013-7D1C-4B3A-B6EF-F99117771980}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

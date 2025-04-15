@@ -1,6 +1,6 @@
 ﻿using UserNotifications;
 
-namespace Notify.App.Platforms.MacCatalyst;
+namespace LocalNotificationsDemo.Platforms.MacCatalyst;
 
 public class NotificationReceiver : UNUserNotificationCenterDelegate
 {
