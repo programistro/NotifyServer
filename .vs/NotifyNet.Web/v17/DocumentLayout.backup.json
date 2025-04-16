@@ -3,12 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\katana\\RiderProjects\\NotifyNet.Web\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0A8B2013-7D1C-4B3A-B6EF-F99117771980}|LocalNotificationsDemo\\LocalNotificationsDemo.csproj|c:\\users\\katana\\riderprojects\\notifynet.web\\localnotificationsdemo\\localnotificationsdemo.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{0A8B2013-7D1C-4B3A-B6EF-F99117771980}|LocalNotificationsDemo\\LocalNotificationsDemo.csproj|solutionrelative:localnotificationsdemo\\localnotificationsdemo.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{0A8B2013-7D1C-4B3A-B6EF-F99117771980}|LocalNotificationsDemo\\LocalNotificationsDemo.csproj|c:\\users\\katana\\riderprojects\\notifynet.web\\localnotificationsdemo\\platforms\\android\\mainactivity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A8B2013-7D1C-4B3A-B6EF-F99117771980}|LocalNotificationsDemo\\LocalNotificationsDemo.csproj|solutionrelative:localnotificationsdemo\\platforms\\android\\mainactivity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0C87F843-D54D-46A2-8C39-192DE45D4AF5}|NotifyNet.Web\\NotifyNet.Web.csproj|c:\\users\\katana\\riderprojects\\notifynet.web\\notifynet.web\\notifynet.web.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{0C87F843-D54D-46A2-8C39-192DE45D4AF5}|NotifyNet.Web\\NotifyNet.Web.csproj|solutionrelative:notifynet.web\\notifynet.web.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{0A8B2013-7D1C-4B3A-B6EF-F99117771980}|LocalNotificationsDemo\\LocalNotificationsDemo.csproj|c:\\users\\katana\\riderprojects\\notifynet.web\\localnotificationsdemo\\platforms\\android\\backservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A8B2013-7D1C-4B3A-B6EF-F99117771980}|LocalNotificationsDemo\\LocalNotificationsDemo.csproj|solutionrelative:localnotificationsdemo\\platforms\\android\\backservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A8B2013-7D1C-4B3A-B6EF-F99117771980}|LocalNotificationsDemo\\LocalNotificationsDemo.csproj|c:\\users\\katana\\riderprojects\\notifynet.web\\localnotificationsdemo\\service\\orderbackgroundservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A8B2013-7D1C-4B3A-B6EF-F99117771980}|LocalNotificationsDemo\\LocalNotificationsDemo.csproj|solutionrelative:localnotificationsdemo\\service\\orderbackgroundservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A8B2013-7D1C-4B3A-B6EF-F99117771980}|LocalNotificationsDemo\\LocalNotificationsDemo.csproj|c:\\users\\katana\\riderprojects\\notifynet.web\\localnotificationsdemo\\platforms\\android\\androidmanifest.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{0A8B2013-7D1C-4B3A-B6EF-F99117771980}|LocalNotificationsDemo\\LocalNotificationsDemo.csproj|solutionrelative:localnotificationsdemo\\platforms\\android\\androidmanifest.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A8B2013-7D1C-4B3A-B6EF-F99117771980}|LocalNotificationsDemo\\LocalNotificationsDemo.csproj|c:\\users\\katana\\riderprojects\\notifynet.web\\localnotificationsdemo\\mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A8B2013-7D1C-4B3A-B6EF-F99117771980}|LocalNotificationsDemo\\LocalNotificationsDemo.csproj|solutionrelative:localnotificationsdemo\\mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0A8B2013-7D1C-4B3A-B6EF-F99117771980}|LocalNotificationsDemo\\LocalNotificationsDemo.csproj|c:\\users\\katana\\riderprojects\\notifynet.web\\localnotificationsdemo\\mainpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0A8B2013-7D1C-4B3A-B6EF-F99117771980}|LocalNotificationsDemo\\LocalNotificationsDemo.csproj|solutionrelative:localnotificationsdemo\\mainpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,28 +54,77 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "OrderBackgroundService.cs",
+              "DocumentMoniker": "C:\\Users\\katana\\RiderProjects\\NotifyNet.Web\\LocalNotificationsDemo\\Service\\OrderBackgroundService.cs",
+              "RelativeDocumentMoniker": "LocalNotificationsDemo\\Service\\OrderBackgroundService.cs",
+              "ToolTip": "C:\\Users\\katana\\RiderProjects\\NotifyNet.Web\\LocalNotificationsDemo\\Service\\OrderBackgroundService.cs",
+              "RelativeToolTip": "LocalNotificationsDemo\\Service\\OrderBackgroundService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-16T17:03:22.142Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "MainPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\katana\\RiderProjects\\NotifyNet.Web\\LocalNotificationsDemo\\MainPage.xaml.cs",
+              "RelativeDocumentMoniker": "LocalNotificationsDemo\\MainPage.xaml.cs",
+              "ToolTip": "C:\\Users\\katana\\RiderProjects\\NotifyNet.Web\\LocalNotificationsDemo\\MainPage.xaml.cs",
+              "RelativeToolTip": "LocalNotificationsDemo\\MainPage.xaml.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAwwDoAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-16T17:13:25.171Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MauiProgram.cs",
+              "DocumentMoniker": "C:\\Users\\katana\\RiderProjects\\NotifyNet.Web\\LocalNotificationsDemo\\MauiProgram.cs",
+              "RelativeDocumentMoniker": "LocalNotificationsDemo\\MauiProgram.cs",
+              "ToolTip": "C:\\Users\\katana\\RiderProjects\\NotifyNet.Web\\LocalNotificationsDemo\\MauiProgram.cs",
+              "RelativeToolTip": "LocalNotificationsDemo\\MauiProgram.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAApwBwAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-16T17:11:03.862Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AndroidManifest.xml",
+              "DocumentMoniker": "C:\\Users\\katana\\RiderProjects\\NotifyNet.Web\\LocalNotificationsDemo\\Platforms\\Android\\AndroidManifest.xml",
+              "RelativeDocumentMoniker": "LocalNotificationsDemo\\Platforms\\Android\\AndroidManifest.xml",
+              "ToolTip": "C:\\Users\\katana\\RiderProjects\\NotifyNet.Web\\LocalNotificationsDemo\\Platforms\\Android\\AndroidManifest.xml",
+              "RelativeToolTip": "LocalNotificationsDemo\\Platforms\\Android\\AndroidManifest.xml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003576|",
+              "WhenOpened": "2025-04-16T17:16:59.769Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "NotifyNet.Web.csproj",
-              "DocumentMoniker": "C:\\Users\\katana\\RiderProjects\\NotifyNet.Web\\NotifyNet.Web\\NotifyNet.Web.csproj",
-              "RelativeDocumentMoniker": "NotifyNet.Web\\NotifyNet.Web.csproj",
-              "ToolTip": "C:\\Users\\katana\\RiderProjects\\NotifyNet.Web\\NotifyNet.Web\\NotifyNet.Web.csproj",
-              "RelativeToolTip": "NotifyNet.Web\\NotifyNet.Web.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-04-15T17:46:27.276Z",
+              "Title": "BackService.cs",
+              "DocumentMoniker": "C:\\Users\\katana\\RiderProjects\\NotifyNet.Web\\LocalNotificationsDemo\\Platforms\\Android\\BackService.cs",
+              "RelativeDocumentMoniker": "LocalNotificationsDemo\\Platforms\\Android\\BackService.cs",
+              "ToolTip": "C:\\Users\\katana\\RiderProjects\\NotifyNet.Web\\LocalNotificationsDemo\\Platforms\\Android\\BackService.cs",
+              "RelativeToolTip": "LocalNotificationsDemo\\Platforms\\Android\\BackService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-16T17:35:30.023Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "LocalNotificationsDemo",
-              "DocumentMoniker": "C:\\Users\\katana\\RiderProjects\\NotifyNet.Web\\LocalNotificationsDemo\\LocalNotificationsDemo.csproj",
-              "RelativeDocumentMoniker": "LocalNotificationsDemo\\LocalNotificationsDemo.csproj",
-              "ToolTip": "C:\\Users\\katana\\RiderProjects\\NotifyNet.Web\\LocalNotificationsDemo\\LocalNotificationsDemo.csproj",
-              "RelativeToolTip": "LocalNotificationsDemo\\LocalNotificationsDemo.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-04-15T19:09:17.156Z",
+              "Title": "MainActivity.cs",
+              "DocumentMoniker": "C:\\Users\\katana\\RiderProjects\\NotifyNet.Web\\LocalNotificationsDemo\\Platforms\\Android\\MainActivity.cs",
+              "RelativeDocumentMoniker": "LocalNotificationsDemo\\Platforms\\Android\\MainActivity.cs",
+              "ToolTip": "C:\\Users\\katana\\RiderProjects\\NotifyNet.Web\\LocalNotificationsDemo\\Platforms\\Android\\MainActivity.cs",
+              "RelativeToolTip": "LocalNotificationsDemo\\Platforms\\Android\\MainActivity.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-16T19:13:28.669Z",
               "EditorCaption": ""
             }
           ]

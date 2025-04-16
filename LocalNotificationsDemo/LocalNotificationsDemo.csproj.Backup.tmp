@@ -51,15 +51,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client.Core" Version="9.0.4" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.4" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\NotifyNet.Core\NotifyNet.Core.csproj" />
+	  <Folder Include="Service\" />
 	</ItemGroup>
 
 </Project>

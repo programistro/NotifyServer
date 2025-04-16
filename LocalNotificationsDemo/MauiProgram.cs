@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using LocalNotificationsDemo.Service;
+using Microsoft.Extensions.Logging;
 
 namespace LocalNotificationsDemo
 {
@@ -14,7 +15,6 @@ namespace LocalNotificationsDemo
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
-
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
@@ -26,6 +26,8 @@ namespace LocalNotificationsDemo
 #elif MACCATALYST
             builder.Services.AddSingleton<INotificationManagerService, LocalNotificationsDemo.Platforms.MacCatalyst.NotificationManagerService>();
 #endif
+            builder.Services.AddSingleton<OrderBackgroundService>();
+            builder.Services.AddHostedService<OrderBackgroundService>();
             builder.Services.AddSingleton<MainPage>();
 
             return builder.Build();
