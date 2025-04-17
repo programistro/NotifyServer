@@ -57,7 +57,7 @@ public class ForegroundServiceDemo : global::Android.App.Service
     public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
     {
         _hubConnection = new HubConnectionBuilder()
-           .WithUrl("https://192.168.1.83:8080/orderHub") // Замените на реальный URL вашего API
+           .WithUrl("http://192.168.1.83:8080/orderHub") // Замените на реальный URL вашего API
            .WithAutomaticReconnect() // Автоматическое переподключение при разрыве
            .Build();
 
@@ -65,7 +65,7 @@ public class ForegroundServiceDemo : global::Android.App.Service
         _hubConnection.On<Order>("OrderUpdated", OrderUpdated);
         _hubConnection.On<Guid>("OrderDeleted", OrderDeleted);
 
-        _hubConnection.InvokeAsync("Send", "connect");
+       
 
         // Обработка ошибок подключения
         _hubConnection.Closed += async (error) =>
@@ -87,6 +87,8 @@ public class ForegroundServiceDemo : global::Android.App.Service
 
         //_notificationManagerService.SendNotification("adwad", "dawdwad");
 
+        _hubConnection.InvokeAsync("Send", "connect");
+        
         if (intent.Action.Equals(Constants.ACTION_START_SERVICE))
         {
             if (IsStarted)
@@ -117,7 +119,7 @@ public class ForegroundServiceDemo : global::Android.App.Service
 
     private void OrderCreated(OrderDto order)
     {
-        _notificationManagerService.SendNotification("dwdwadwa", "wadwadw");
+        _notificationManagerService.SendNotification("Notify", "ордер создан");
     }
 
     private void OrderUpdated(Order order)
