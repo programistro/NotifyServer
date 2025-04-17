@@ -5,9 +5,13 @@ using NotifyNet.Core.Dto;
 
 namespace NotifyNet.Web.Hubs;
 
-[Authorize]
-public class OrderHub : Hub
+public class OrderHub(ILogger<OrderHub> _logger) : Hub
 {
+    public async Task Send(string message)
+    {
+        _logger.LogInformation(message);
+    }
+
     public async Task NotifyOrderCreated(OrderDto order)
     {
         await Clients.All.SendAsync("OrderCreated", order);
