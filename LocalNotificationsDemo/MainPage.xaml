@@ -6,6 +6,11 @@
              Padding="10">
     <VerticalStackLayout x:Name="verticalStackLayout"
                          Spacing="6">
+        
+        <Label Text="Welcome to the app!" FontSize="24" HorizontalOptions="Center"/>
+        <Label Text="{Binding WelcomeMessage}" FontSize="18" HorizontalOptions="Center"/>
+        <Button Text="Logout" Command="{Binding LogoutCommand}" HorizontalOptions="Center"/>
+        
         <Label Text="Click the button below to create a local notification."
                HorizontalOptions="Center"
                VerticalOptions="Start" />

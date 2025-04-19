@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LocalNotificationsDemo.Pages.RegisterPage">
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="30">
+            <Label Text="Create an account" FontSize="24" HorizontalOptions="Center"/>
+            
+            <Entry Placeholder="Username" Text="{Binding Username}"/>
+            <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email"/>
+            <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True"/>
+            <Entry Placeholder="Confirm Password" Text="{Binding ConfirmPassword}" IsPassword="True"/>
+            
+            <Button Text="Register" Command="{Binding RegisterCommand}"/>
+            
+            <Label Text="Already have an account?" HorizontalOptions="Center"/>
+            <Button Text="Login" Command="{Binding GoToLoginCommand}" HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentView>
