@@ -1,5 +1,11 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
+using LocalNotificationsDemo.Pages;
 using LocalNotificationsDemo.Service;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Maui;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Controls;
 #if ANDROID
 using LocalNotificationsDemo.Platforms.Android;
 #endif
@@ -22,18 +28,11 @@ public partial class MainPage : ContentPage
 
         notificationManager = IPlatformApplication.Current.Services.GetRequiredService<INotificationManagerService>();
         _authService = IPlatformApplication.Current.Services.GetRequiredService<IAuthService>();
-        LogoutCommand = new Command(Logout);
         notificationManager.NotificationReceived += (sender, eventArgs) =>
         {
             var eventData = (NotificationEventArgs)eventArgs;
             ShowNotification(eventData.Title, eventData.Message);
         };
-    }
-    
-    private void Logout()
-    {
-        _authService.Logout();
-        Shell.Current.GoToAsync("//Login");
     }
 
 #if ANDROID
@@ -71,5 +70,11 @@ public partial class MainPage : ContentPage
             };
             verticalStackLayout.Children.Add(msg);
         });
+    }
+
+    private async void Button_OnClicked(object? sender, EventArgs e)
+    {
+        Routing.RegisterRoute("RegisterPage", typeof(RegisterPage));
+        await Shell.Current.GoToAsync("RegisterPage");
     }
 }

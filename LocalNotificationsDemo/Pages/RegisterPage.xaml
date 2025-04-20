@@ -1,21 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="LocalNotificationsDemo.Pages.RegisterPage">
+             x:Class="LocalNotificationsDemo.Pages.RegisterPage"
+             Title="Регистрация">
     <ScrollView>
         <VerticalStackLayout Spacing="15" Padding="30">
             <Label Text="Create an account" FontSize="24" HorizontalOptions="Center"/>
             
-            <Entry Placeholder="Username" Text="{Binding Username}"/>
+            <Entry Placeholder="Имя пользователя" Text="{Binding Username}"/>
             <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email"/>
-            <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True"/>
-            <Entry Placeholder="Confirm Password" Text="{Binding ConfirmPassword}" IsPassword="True"/>
+            <Entry Placeholder="Пароль" Text="{Binding Password}" IsPassword="True"/>
+            <Entry Placeholder="Подтвердить пароль" Text="{Binding ConfirmPassword}" IsPassword="True"/>
             
-            <Button Text="Register" Command="{Binding RegisterCommand}"/>
+            <Button Text="Зарегистрироваться" Clicked="Register_OnClicked"/>
             
-            <Label Text="Already have an account?" HorizontalOptions="Center"/>
-            <Button Text="Login" Command="{Binding GoToLoginCommand}" HorizontalOptions="Center"/>
+            <Label Text="Уже имеете аккаунт?" HorizontalOptions="Center"/>
+            <Button Text="Войти" Command="{Binding GoToLoginCommand}" HorizontalOptions="Center"/>
         </VerticalStackLayout>
     </ScrollView>
-</ContentView>
+</ContentPage>

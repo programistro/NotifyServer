@@ -3,6 +3,8 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using LocalNotificationsDemo.Platforms.Android;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Maui;
 
 namespace LocalNotificationsDemo
 {

@@ -3,6 +3,7 @@ using Android.Content;
 using Android.Graphics;
 using Android.OS;
 using AndroidX.Core.App;
+using Microsoft.Maui.ApplicationModel;
 
 namespace LocalNotificationsDemo.Platforms.Android;
 
