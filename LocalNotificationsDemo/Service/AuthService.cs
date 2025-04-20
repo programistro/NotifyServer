@@ -1,61 +1,54 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AXO.Core.Models;
+using LocalNotificationsDemo.Interfaces;
 using NotifyNet.Application.Interface;
+using NotifyNet.Core.Dto;
 
 namespace LocalNotificationsDemo.Service;
 
-// Services/IAuthService.cs
-public interface IAuthService
+
+public class AuthService(IUserService _userService, HttpClient _httpClient) : IAuthService
 {
-    Task<bool> RegisterAsync(Employee user);
-    Task<bool> LoginAsync(string username, string password);
-    void Logout();
-    bool IsAuthenticated { get; }
-    string Username { get; }
-}
+    public string JwtToken { get; private set; }
 
-// Services/AuthService.cs
-public class AuthService(IUserService _userService) : IAuthService
-{
-    private readonly List<Employee> _users = new();
-    private bool _isAuthenticated;
-    private string _username;
-
-    public bool IsAuthenticated => _isAuthenticated;
-    public string Username => _username;
-
-    public Task<bool> RegisterAsync(Employee user)
+    public async Task<string> RegisterAsync(string email, string password, string username)
     {
-        if (_users.Any(u => u.Name == user.Name || u.Email == user.Email))
-        {
-            return Task.FromResult(false);
-        }
+        var user = new UserDto { Email = email, Password = password, Name = username };
+        var json = JsonSerializer.Serialize(user);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        _users.Add(user);
-        return Task.FromResult(true);
+        var response = await _httpClient.PostAsync("http://192.168.1.83:8080/Auth/register", content);
+        var result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+            return null;
+
+        JwtToken = await response.Content.ReadAsStringAsync();
+        return JwtToken;
     }
 
-    public async Task<bool> LoginAsync(string username, string password)
+    public async Task<string> LoginAsync(string email, string password,  string username)
     {
-        var passwordHash = await _userService.CreatePasswordHash(password);
-        
-        var user = _users.FirstOrDefault(u => u.Name == username && u.PasswordHash == passwordHash);
-        
-        if (user != null)
-        {
-            _isAuthenticated = true;
-            _username = user.Name;
-            return true;
-        }
-        
-        return false;
+        var user = new UserDto { Email = email, Password = password, Name = username };
+        var json = JsonSerializer.Serialize(user);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PostAsync("http://192.168.1.83:8080/Auth/login", content);
+        if (!response.IsSuccessStatusCode)
+            return null;
+
+        JwtToken = await response.Content.ReadAsStringAsync();
+        return JwtToken;
     }
 
-    public void Logout()
+    public void SetAuthHeader()
     {
-        _isAuthenticated = false;
-        _username = null;
+        if (!string.IsNullOrEmpty(JwtToken))
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", JwtToken);
     }
 }

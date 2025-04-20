@@ -62,9 +62,9 @@ public class UserService : IUserService
         {
             Id = Guid.NewGuid().ToString(),
             Email = dto.Email,
+            UserName = dto.Name,
             Name = dto.Name,
-            LastName = dto.LastName,
-            PasswordHash = await CreatePasswordHash(dto.Password)
+            PasswordHash = await CreatePasswordHash(dto.Password),
         };
         
         await _userRepository.AddAsync(user);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
+using LocalNotificationsDemo.Interfaces;
 using LocalNotificationsDemo.Pages;
 using LocalNotificationsDemo.Service;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,8 +18,6 @@ public partial class MainPage : ContentPage
     INotificationManagerService notificationManager;
     int notificationNumber = 0;
     private readonly IAuthService _authService;
-    
-    public string WelcomeMessage => $"Hello, {_authService.Username}!";
     
     public ICommand LogoutCommand { get; }
 

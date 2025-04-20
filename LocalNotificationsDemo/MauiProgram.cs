@@ -1,6 +1,7 @@
-﻿using LocalNotificationsDemo.Pages;
+﻿using System.Net.Http;
+using LocalNotificationsDemo.Interfaces;
+using LocalNotificationsDemo.Pages;
 using LocalNotificationsDemo.Service;
-using LocalNotificationsDemo.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Hosting;
@@ -31,12 +32,8 @@ namespace LocalNotificationsDemo
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddSingleton<IAuthService, AuthService>();
+            builder.Services.AddScoped<HttpClient>();
         
-            // Регистрация ViewModels
-            builder.Services.AddTransient<LoginViewModel>();
-            builder.Services.AddTransient<RegisterViewModel>();
-        
-            // Регистрация страниц
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterPage>();
             builder.Services.AddTransient<MainPage>();
