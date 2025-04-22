@@ -5,7 +5,6 @@ using Microsoft.IdentityModel.Tokens;
 using NotifyNet.Application.Interface;
 using NotifyNet.Application.Service;
 using NotifyNet.Core.Interface;
-using NotifyNet.Core.Models;
 using NotifyNet.Infrastructure.Data;
 using NotifyNet.Infrastructure.Repository;
 using NotifyNet.Web;

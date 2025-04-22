@@ -1,4 +1,6 @@
-﻿namespace LocalNotificationsDemo;
+﻿using System;
+
+namespace LocalNotificationsDemo;
 
 public class FlyoutPageItem
 {

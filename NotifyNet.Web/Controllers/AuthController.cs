@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using NotifyNet.Application.Interface;
 using NotifyNet.Core.Dto;
-using NotifyNet.Core.Models;
 
 namespace NotifyNet.Web.Controllers;
 

@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AXO.Core.Models;
+using Microsoft.EntityFrameworkCore;
 using NotifyNet.Core.Interface;
-using NotifyNet.Core.Models;
 using NotifyNet.Infrastructure.Data;
 
 namespace NotifyNet.Infrastructure.Repository;
@@ -14,47 +14,47 @@ public class UserRepository : IUserRepository
         _context = context;
     }
     
-    public async Task<User> GetByIdAsync(string orderId)
+    public async Task<Employee> GetByIdAsync(Guid employeeId)
     {
-        return await _context.Users.FirstOrDefaultAsync(x => x.Id == orderId);
+        return await _context.Employees.FirstOrDefaultAsync(x => x.Id == employeeId);
     }
 
-    public async Task<User> GetByNameAsync(string name)
+    public async Task<Employee> GetByNameAsync(string name)
     {
-        return await _context.Users.FirstOrDefaultAsync(x => x.Name == name);
+        return await _context.Employees.FirstOrDefaultAsync(x => x.Name == name);
     }
 
-    public async Task<User> GetByEmailAsync(string email)
+    public async Task<Employee> GetByEmailAsync(string email)
     {
-        return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+        return await _context.Employees.FirstOrDefaultAsync(x => x.Email == email);
     }
 
-    public async Task AddAsync(User user)
+    public async Task AddAsync(Employee user)
     {
-        await _context.Users.AddAsync(user);
+        await _context.Employees.AddAsync(user);
         await _context.SaveChangesAsync();
     }
 
-    public async Task Update(User user)
+    public async Task Update(Employee user)
     {
-        _context.Users.Update(user);
+        _context.Employees.Update(user);
         await _context.SaveChangesAsync();
     }
 
-    public async Task Delete(string userId)
+    public async Task Delete(Guid userId)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+        var user = await _context.Employees.FirstOrDefaultAsync(x => x.Id == userId);
 
         if (user != null)
         {
-            _context.Users.Remove(user);
+            _context.Employees.Remove(user);
         
             await _context.SaveChangesAsync();
         }
     }
 
-    public async Task<IEnumerable<User>> GetAllAsync()
+    public async Task<IEnumerable<Employee>> GetAllAsync()
     {
-        return await _context.Users.ToListAsync();
+        return await _context.Employees.ToListAsync();
     }
 }

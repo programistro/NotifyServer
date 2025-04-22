@@ -1,10 +1,10 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using AXO.Core.Models;
 using Microsoft.Extensions.Logging;
 using NotifyNet.Application.Interface;
 using NotifyNet.Core.Dto;
 using NotifyNet.Core.Interface;
-using NotifyNet.Core.Models;
 
 namespace NotifyNet.Application.Service;
 
@@ -20,9 +20,9 @@ public class UserService : IUserService
         _logger = logger;
     }
     
-    public async Task<User> GetByIdAsync(string userId)
+    public async Task<Employee> GetByIdAsync(Guid id)
     {
-        var user = await _userRepository.GetByIdAsync(userId);
+        var user = await _userRepository.GetByIdAsync(id);
 
         if (user is not null)
         {
@@ -32,7 +32,7 @@ public class UserService : IUserService
         return null;
     }
 
-    public async Task<User> GetByNameAsync(string name)
+    public async Task<Employee> GetByNameAsync(string name)
     {
         var user = await _userRepository.GetByNameAsync(name);
 
@@ -44,7 +44,7 @@ public class UserService : IUserService
         return null;
     }
 
-    public async Task<User> GetByEmailAsync(string email)
+    public async Task<Employee> GetByEmailAsync(string email)
     {
         var user = await _userRepository.GetByEmailAsync(email);
 
@@ -56,32 +56,34 @@ public class UserService : IUserService
         return null;
     }
 
-    public async Task<User> AddAsync(UserDto dto)
+    public async Task<Employee> AddAsync(UserDto dto)
     {
-        User user = new()
+        Employee user = new()
         {
-            Id = Guid.NewGuid().ToString(),
+            Id = Guid.NewGuid(),
             Email = dto.Email,
             UserName = dto.Name,
             Name = dto.Name,
             PasswordHash = await CreatePasswordHash(dto.Password),
+            ServiceNumber = Guid.NewGuid().ToString(),
+            Photo = Guid.NewGuid().ToString(),
         };
         
         await _userRepository.AddAsync(user);
         return user;
     }
 
-    public async Task Update(User user)
+    public async Task Update(Employee user)
     {
         await _userRepository.Update(user);
     }
 
-    public async Task Delete(string userId)
+    public async Task Delete(Guid id)
     {
-        await _userRepository.Delete(userId);
+        await _userRepository.Delete(id);
     }
 
-    public async Task<IEnumerable<User>> GetAllAsync()
+    public async Task<IEnumerable<Employee>> GetAllAsync()
     {
         return await _userRepository.GetAllAsync();
     }

@@ -1,20 +1,20 @@
-﻿using NotifyNet.Core.Models;
+﻿using AXO.Core.Models;
 
 namespace NotifyNet.Core.Interface;
 
 public interface IUserRepository
 {
-    Task<User> GetByIdAsync(string userId);
+    Task<Employee> GetByIdAsync(Guid userId);
     
-    Task<User> GetByNameAsync(string name);
+    Task<Employee> GetByNameAsync(string name);
     
-    Task<User> GetByEmailAsync(string email);
+    Task<Employee> GetByEmailAsync(string email);
     
-    Task AddAsync(User user);
+    Task AddAsync(Employee user);
     
-    Task Update(User user);
+    Task Update(Employee user);
     
-    Task Delete(string userId);
+    Task Delete(Guid userId);
     
-    Task<IEnumerable<User>> GetAllAsync();
+    Task<IEnumerable<Employee>> GetAllAsync();
 }

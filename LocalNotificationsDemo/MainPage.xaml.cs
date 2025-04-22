@@ -105,8 +105,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
             
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(token);
-        
-            // Извлечение данных из токена
+
             var email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
             var name = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.GivenName).Value;
         }

@@ -1,23 +1,23 @@
-﻿using NotifyNet.Core.Dto;
-using NotifyNet.Core.Models;
+﻿using AXO.Core.Models;
+using NotifyNet.Core.Dto;
 
 namespace NotifyNet.Application.Interface;
 
 public interface IUserService
 {
-    Task<User> GetByIdAsync(string userId);
+    Task<Employee> GetByIdAsync(Guid id);
     
-    Task<User> GetByNameAsync(string name);
+    Task<Employee> GetByNameAsync(string name);
     
-    Task<User> GetByEmailAsync(string email);
+    Task<Employee> GetByEmailAsync(string email);
     
-    Task<User> AddAsync(UserDto user);
+    Task<Employee> AddAsync(UserDto user);
     
-    Task Update(User user);
+    Task Update(Employee user);
     
-    Task Delete(string userId);
+    Task Delete(Guid id);
     
-    Task<IEnumerable<User>> GetAllAsync();
+    Task<IEnumerable<Employee>> GetAllAsync();
     
     Task<string> CreatePasswordHash(string password);
 }
