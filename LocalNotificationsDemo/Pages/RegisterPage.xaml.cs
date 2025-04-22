@@ -45,4 +45,10 @@ public partial class RegisterPage : ContentPage
             }
         }
     }
+
+    private async void LoginPage_OnClicked(object? sender, EventArgs e)
+    {
+        Routing.RegisterRoute("LoginPage", typeof(LoginPage));
+        await Shell.Current.GoToAsync("LoginPage");
+    }
 }

@@ -15,7 +15,7 @@
             <Button Text="Зарегистрироваться" Clicked="Register_OnClicked"/>
             
             <Label Text="Уже имеете аккаунт?" HorizontalOptions="Center"/>
-            <Button Text="Войти" Command="{Binding GoToLoginCommand}" HorizontalOptions="Center"/>
+            <Button Text="Войти" Clicked="LoginPage_OnClicked" HorizontalOptions="Center"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

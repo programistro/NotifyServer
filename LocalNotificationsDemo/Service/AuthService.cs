@@ -32,9 +32,9 @@ public class AuthService(IUserService _userService, HttpClient _httpClient) : IA
         return JwtToken;
     }
 
-    public async Task<string> LoginAsync(string email, string password,  string username)
+    public async Task<string> LoginAsync(string email, string password)
     {
-        var user = new UserDto { Email = email, Password = password, Name = username };
+        var user = new UserDto { Email = email, Password = password};
         var json = JsonSerializer.Serialize(user);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 

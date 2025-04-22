@@ -34,12 +34,17 @@ public class AuthController : ControllerBase
             return BadRequest(new { message = "Username or password is incorrect" });
         }
         
-        var claims = new List<Claim> { new Claim(ClaimTypes.Name, user.Email) };
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, user.Email), 
+            new Claim(ClaimTypes.GivenName, user.Name), 
+        };
+
         var jwt = new JwtSecurityToken(
             issuer: AuthOptions.ISSUER,
             audience: AuthOptions.AUDIENCE,
             claims: claims,
-            expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)),
+            expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(15)),
             signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(),
                 SecurityAlgorithms.HmacSha256));
 

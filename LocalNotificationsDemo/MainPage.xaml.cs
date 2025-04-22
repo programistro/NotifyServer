@@ -1,4 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
 using System.Windows.Input;
 using LocalNotificationsDemo.Interfaces;
 using LocalNotificationsDemo.Pages;
@@ -7,24 +11,38 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Storage;
 #if ANDROID
 using LocalNotificationsDemo.Platforms.Android;
 #endif
 
 namespace LocalNotificationsDemo;
 
-public partial class MainPage : ContentPage
+public partial class MainPage : ContentPage, INotifyPropertyChanged
 {
     INotificationManagerService notificationManager;
     int notificationNumber = 0;
     private readonly IAuthService _authService;
+    
+    private bool isAuthenticated;
+    public bool IsAuthenticated
+    {
+        get => isAuthenticated;
+        set
+        {
+            isAuthenticated = value;
+            OnPropertyChanged(nameof(IsAuthenticated));
+        }
+    }
     
     public ICommand LogoutCommand { get; }
 
     public MainPage()
     {
         InitializeComponent();
-
+        
+        BindingContext = this;
+        
         notificationManager = IPlatformApplication.Current.Services.GetRequiredService<INotificationManagerService>();
         _authService = IPlatformApplication.Current.Services.GetRequiredService<IAuthService>();
         notificationManager.NotificationReceived += (sender, eventArgs) =>
@@ -75,5 +93,33 @@ public partial class MainPage : ContentPage
     {
         Routing.RegisterRoute("RegisterPage", typeof(RegisterPage));
         await Shell.Current.GoToAsync("RegisterPage");
+    }
+
+    private async void MainPage_OnLoaded(object? sender, EventArgs e)
+    { 
+        var token = await SecureStorage.Default.GetAsync("jwt_token");
+
+        if (token != null)
+        {
+            IsAuthenticated = false;
+            
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+        
+            // Извлечение данных из токена
+            var email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+            var name = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.GivenName).Value;
+        }
+        else
+        {
+            IsAuthenticated = true;
+        }
+    }
+    
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

@@ -3,24 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LocalNotificationsDemo.MainPage"
              Title="Главная страница"
-             Padding="10">
+             Padding="10" Loaded="MainPage_OnLoaded">
     <VerticalStackLayout x:Name="verticalStackLayout"
                          Spacing="6">
         
-        <Label Text="Welcome to the app!" FontSize="24" HorizontalOptions="Center"/>
-        <Label Text="{Binding WelcomeMessage}" FontSize="18" HorizontalOptions="Center"/>
-        <Button Text="Logout" Clicked="Button_OnClicked" HorizontalOptions="Center"/>
+        <Button Text="Зарегистрироваться" Clicked="Button_OnClicked" HorizontalOptions="Center"
+                IsVisible="{Binding IsAuthenticated}"/>
         
-        <Label Text="Click the button below to create a local notification."
-               HorizontalOptions="Center"
-               VerticalOptions="Start" />
         <Button Text="Create Notification"
                 HorizontalOptions="Center"
                 VerticalOptions="Start"
                 Clicked="OnSendClick" />
-        <Label Text="Click the button below to schedule a local notification for in 10 seconds time."
-               HorizontalOptions="Center"
-               VerticalOptions="Start" />
         <Button Text="Create Notification"
                 HorizontalOptions="Center"
                 VerticalOptions="Start"

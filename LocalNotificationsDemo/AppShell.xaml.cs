@@ -1,4 +1,5 @@
 ﻿using LocalNotificationsDemo.Interfaces;
+using LocalNotificationsDemo.Pages;
 using LocalNotificationsDemo.Service;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui;

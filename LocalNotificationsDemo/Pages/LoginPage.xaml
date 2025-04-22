@@ -1,19 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="LocalNotificationsDemo.Pages.LoginPage">
     <ScrollView>
         <VerticalStackLayout Spacing="15" Padding="30">
-            <Label Text="Welcome back" FontSize="24" HorizontalOptions="Center"/>
+            <Label Text="Create an account" FontSize="24" HorizontalOptions="Center"/>
             
-            <Entry Placeholder="Username" Text="{Binding Username}"/>
-            <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True"/>
+            <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email"/>
+            <Entry Placeholder="Пароль" Text="{Binding Password}" IsPassword="True"/>
             
-            <Button Text="Login" Command="{Binding LoginCommand}"/>
-            
-            <Label Text="Don't have an account?" HorizontalOptions="Center"/>
-            <Button Text="Register" Command="{Binding GoToRegisterCommand}" HorizontalOptions="Center"/>
+            <Button Text="Войти" Clicked="Login_OnClick"/>
         </VerticalStackLayout>
     </ScrollView>
-</ContentView>
+</ContentPage>
