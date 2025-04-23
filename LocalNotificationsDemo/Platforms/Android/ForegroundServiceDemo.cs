@@ -13,12 +13,16 @@ using Microsoft.Maui.Controls;
 using NotifyNet.Core.Dto;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Storage;
+using NotifyNet.Application.Interface;
 
 namespace LocalNotificationsDemo.Platforms.Android;
 
@@ -29,10 +33,17 @@ public class ForegroundServiceDemo : global::Android.App.Service
     private static bool IsStarted { get; set; }
     private HubConnection _hubConnection;
     private readonly ILogger<ForegroundServiceDemo> _logger;
+    private readonly IUserService _userService;
+    
+    private string _token { get; set; }
+    private Employee _employee { get; set; }
+    
+    private string _email { get; set; }
 
     public ForegroundServiceDemo()
     {
         _notificationManagerService = MauiApplication.Current.Services.GetService<INotificationManagerService>();
+        _userService = MauiApplication.Current.Services.GetService<IUserService>();
         _logger = MauiApplication.Current.Services.GetService<ILogger<ForegroundServiceDemo>>();
         _notificationManagerService.NotificationReceived += (sender, eventArgs) =>
         {
@@ -64,13 +75,20 @@ public class ForegroundServiceDemo : global::Android.App.Service
            .WithAutomaticReconnect() // Автоматическое переподключение при разрыве
            .Build();
 
-        _hubConnection.On<OrderDto>("OrderCreated", OrderCreated);
+        _hubConnection.On<Order>("OrderCreated", OrderCreated);
         _hubConnection.On<Order>("OrderUpdated", OrderUpdated);
         _hubConnection.On<Guid>("OrderDeleted", OrderDeleted);
 
-       
+        _token = SecureStorage.Default.GetAsync("jwt_token").Result;
 
-        // Обработка ошибок подключения
+        if (_token != null)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(_token);
+
+            _email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+        }
+        
         _hubConnection.Closed += async (error) =>
         {
             await Task.Delay(new Random().Next(0, 5) * 1000);
@@ -88,7 +106,7 @@ public class ForegroundServiceDemo : global::Android.App.Service
             throw new System.Exception(ex.Message);
         }
 
-        //_notificationManagerService.SendNotification("adwad", "dawdwad");
+        // _notificationManagerService.SendNotification("adwad", "dawdwad");
 
         _hubConnection.InvokeAsync("Send", "connect");
         
@@ -120,9 +138,16 @@ public class ForegroundServiceDemo : global::Android.App.Service
         return StartCommandResult.Sticky;
     }
 
-    private void OrderCreated(OrderDto order)
+    private async void OrderCreated(Order order)
     {
+        if (_employee == null)
+        {
+            _employee = await _userService.GetByEmailAsync(_email);
+        }
+        
         _notificationManagerService.SendNotification("Notify", "ордер создан");
+
+        _employee.Orders.Append<Order>(order);
     }
 
     private void OrderUpdated(Order order)

@@ -10,6 +10,21 @@
         <Button Text="Зарегистрироваться" Clicked="Button_OnClicked" HorizontalOptions="Center"
                 IsVisible="{Binding IsAuthenticated}"/>
         
+        <ListView x:Name="OrderList" IsVisible="{Binding IsAuthenticated}">
+                <ListView.ItemTemplate>
+                        <DataTemplate>
+                                <ViewCell>
+                                        <ViewCell.View>
+                                                <StackLayout>
+                                                        <Label Text="{Binding OrderNumber}" FontSize="16" />
+                                                        <Label Text="{Binding DescriptionDispathcer}" FontSize="14" />
+                                                </StackLayout>
+                                        </ViewCell.View>
+                                </ViewCell>
+                        </DataTemplate>
+                </ListView.ItemTemplate>
+        </ListView>
+        
         <Button Text="Create Notification"
                 HorizontalOptions="Center"
                 VerticalOptions="Start"

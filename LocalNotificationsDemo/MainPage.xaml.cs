@@ -12,6 +12,7 @@ using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
+using NotifyNet.Application.Interface;
 #if ANDROID
 using LocalNotificationsDemo.Platforms.Android;
 #endif
@@ -23,6 +24,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     INotificationManagerService notificationManager;
     int notificationNumber = 0;
     private readonly IAuthService _authService;
+    private readonly IUserService _userService;
     
     private bool isAuthenticated;
     public bool IsAuthenticated
@@ -45,6 +47,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         
         notificationManager = IPlatformApplication.Current.Services.GetRequiredService<INotificationManagerService>();
         _authService = IPlatformApplication.Current.Services.GetRequiredService<IAuthService>();
+        _userService = IPlatformApplication.Current.Services.GetRequiredService<IUserService>();
         notificationManager.NotificationReceived += (sender, eventArgs) =>
         {
             var eventData = (NotificationEventArgs)eventArgs;
@@ -108,6 +111,10 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
 
             var email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
             var name = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.GivenName).Value;
+
+            var user = await _userService.GetByEmailAsync(email);
+            
+            OrderList.ItemsSource = user.Orders;
         }
         else
         {

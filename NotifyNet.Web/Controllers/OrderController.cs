@@ -25,13 +25,13 @@ public class OrderController : ControllerBase
     [HttpGet("get-order-by-id")]
     public async Task<IActionResult> GetOrder(Guid orderId)
     {
-        return Ok(_orderService.GetByIdAsync(orderId));
+        return Ok(await _orderService.GetByIdAsync(orderId));
     }
 
     [HttpGet("get-order-by-name")]
     public async Task<IActionResult> GetOrder(string name)
     {
-        return Ok(_orderService.GetByNameAsync(name));
+        return Ok(await _orderService.GetByNameAsync(name));
     }
 
     [HttpPost("create-order")]
