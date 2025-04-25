@@ -12,55 +12,16 @@ using NotifyNet.Web.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.WebHost.UseUrls("http://0.0.0.0:8080");
+// builder.WebHost.UseUrls("http://0.0.0.0:8080");
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IUserService, UserService>();
-//builder.Services.AddIdentity<User, IdentityRole>()
-//    .AddEntityFrameworkStores<AppDbConetxt>()
-//    .AddDefaultTokenProviders();
 builder.Services.AddDbContextFactory<AppDbConetxt>();
 builder.Services.AddAuthorization();
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-
-            ValidIssuer = AuthOptions.ISSUER,
-
-            ValidateAudience = true,
-
-            ValidAudience = AuthOptions.AUDIENCE,
-
-            ValidateLifetime = true,
-
-            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-
-            ValidateIssuerSigningKey = true,
-        };
-
-        options.Events = new JwtBearerEvents
-        {
-            OnMessageReceived = context =>
-            {
-                var accessToken = context.Request.Query["access_token"];
-
-                var path = context.HttpContext.Request.Path;
-                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/orderHub"))
-                {
-                    context.Token = accessToken;
-                }
-
-                return Task.CompletedTask;
-            }
-        };
-    });
-
+builder.Services.AddCors();
 builder.Services.AddSignalR();
 builder.Services.AddControllers();
 
@@ -74,6 +35,7 @@ var app = builder.Build();
 //}
 
 app.UseHttpsRedirection();
+app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.UseAuthentication();
 app.UseAuthorization();
