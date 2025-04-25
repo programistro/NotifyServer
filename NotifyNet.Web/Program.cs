@@ -35,7 +35,7 @@ var app = builder.Build();
 //}
 
 app.UseHttpsRedirection();
-app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+app.UseCors(builder => builder.WithOrigins("https://api.re.souso.ru/").AllowAnyMethod().AllowAnyHeader());
 
 app.UseAuthentication();
 app.UseAuthorization();
