@@ -64,7 +64,9 @@ namespace AXO.Core.Models
 
 		// public virtual ICollection<EmployeePermission> EmployeePermissions { get; set; }
 
-		public virtual IEnumerable<Order> Orders { get; set; }
+		// public virtual IEnumerable<Order> Orders { get; set; }
+		public virtual List<Order> Orders { get; set; }
+
 
 		// public virtual IEnumerable<OrderEmployee> OrderEmployees { get; set; }
 
