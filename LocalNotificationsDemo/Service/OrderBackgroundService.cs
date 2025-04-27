@@ -43,7 +43,7 @@ public class OrderBackgroundService : BackgroundService
     {
         // Инициализация подключения к SignalR хабу
         _hubConnection = new HubConnectionBuilder()
-            .WithUrl("https://localhost:7012/orderHub") // Замените на реальный URL вашего API
+            .WithUrl("https://api.re.souso.ru/orderHub") // Замените на реальный URL вашего API
             .WithAutomaticReconnect() // Автоматическое переподключение при разрыве
             .Build();
 

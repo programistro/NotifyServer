@@ -23,6 +23,8 @@ using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Storage;
 using NotifyNet.Application.Interface;
+using NotifyNet.Core.Interface;
+using NotifyNet.Infrastructure.Data;
 
 namespace LocalNotificationsDemo.Platforms.Android;
 
@@ -34,10 +36,10 @@ public class ForegroundServiceDemo : global::Android.App.Service
     private HubConnection _hubConnection;
     private readonly ILogger<ForegroundServiceDemo> _logger;
     private readonly IUserService _userService;
-    
+
     private string _token { get; set; }
     private Employee _employee { get; set; }
-    
+
     private string _email { get; set; }
 
     public ForegroundServiceDemo()
@@ -70,84 +72,97 @@ public class ForegroundServiceDemo : global::Android.App.Service
 
     public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
     {
-        _hubConnection = new HubConnectionBuilder()
-           .WithUrl("http://192.168.1.83:8080/orderHub") // Замените на реальный URL вашего API
-           .WithAutomaticReconnect() // Автоматическое переподключение при разрыве
-           .Build();
-
-        _hubConnection.On<Order>("OrderCreated", OrderCreated);
-        _hubConnection.On<Order>("OrderUpdated", OrderUpdated);
-        _hubConnection.On<Guid>("OrderDeleted", OrderDeleted);
-
-        _token = SecureStorage.Default.GetAsync("jwt_token").Result;
-
-        if (_token != null)
+        Task.Run(async () =>
         {
-            var handler = new JwtSecurityTokenHandler();
-            var jwtToken = handler.ReadJwtToken(_token);
+            _hubConnection = new HubConnectionBuilder()
+                .WithUrl("https://api.re.souso.ru/orderHub")
+                .WithAutomaticReconnect()
+                .Build();
 
-            _email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
-        }
-        
-        _hubConnection.Closed += async (error) =>
-        {
-            await Task.Delay(new Random().Next(0, 5) * 1000);
-            await _hubConnection.StartAsync();
-        };
+            _hubConnection.On<Order>("OrderCreated", OrderCreated);
+            _hubConnection.On<Order>("OrderUpdated", OrderUpdated);
+            _hubConnection.On<Guid>("OrderDeleted", OrderDeleted);
+            
+            _token = await SecureStorage.Default.GetAsync("jwt_token");
 
-        try
-        {
-            _hubConnection.StartAsync();
-            _logger.LogInformation("SignalR hub connection started");
-        }
-        catch (System.Exception ex)
-        {
-            Console.WriteLine(ex.ToString());
-            throw new System.Exception(ex.Message);
-        }
+            if (_token != null)
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(_token);
 
-        // _notificationManagerService.SendNotification("adwad", "dawdwad");
+                _email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+            }
 
-        _hubConnection.InvokeAsync("Send", "connect");
-        
-        if (intent.Action.Equals(Constants.ACTION_START_SERVICE))
-        {
-            if (IsStarted)
+            _hubConnection.Closed += async (error) =>
+            {
+                await Task.Delay(new Random().Next(0, 5) * 1000);
+                await _hubConnection.StartAsync();
+            };
+
+            try
+            {
+                await _hubConnection.StartAsync();
+                _logger.LogInformation("SignalR hub connection started");
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw new System.Exception(ex.Message);
+            }
+
+            // _notificationManagerService.SendNotification("adwad", "dawdwad");
+
+            // await _hubConnection.InvokeAsync("Send", "connect");
+
+            if (intent.Action.Equals(Constants.ACTION_START_SERVICE))
+            {
+                if (IsStarted)
+                {
+                    Log.Info("wdwa", "OnStartCommand: Restarting the timer.");
+                    _notificationManagerService.SendNotification("adwad", "dawdwad");
+                }
+                else
+                {
+                    Log.Info("wdwa", "OnStartCommand: Restarting the timer.");
+                    IsStarted = true;
+                }
+            }
+            else if (intent.Action.Equals(Constants.ACTION_STOP_SERVICE))
             {
                 Log.Info("wdwa", "OnStartCommand: Restarting the timer.");
-                _notificationManagerService.SendNotification("adwad", "dawdwad");
+                StopForeground(StopForegroundFlags.Remove);
+                StopSelf();
+
             }
-            else
+            else if (intent.Action.Equals(Constants.ACTION_RESTART_TIMER))
             {
                 Log.Info("wdwa", "OnStartCommand: Restarting the timer.");
-                IsStarted = true;
             }
-        }
-        else if (intent.Action.Equals(Constants.ACTION_STOP_SERVICE))
-        {
-            Log.Info("wdwa", "OnStartCommand: Restarting the timer.");
-            StopForeground(StopForegroundFlags.Remove);
-            StopSelf();
-
-        }
-        else if (intent.Action.Equals(Constants.ACTION_RESTART_TIMER))
-        {
-            Log.Info("wdwa", "OnStartCommand: Restarting the timer.");
-        }
-
+        });
+        
         return StartCommandResult.Sticky;
     }
 
     private async void OrderCreated(Order order)
     {
-        if (_employee == null)
-        {
-            _employee = await _userService.GetByEmailAsync(_email);
-        }
-        
-        _notificationManagerService.SendNotification("Notify", "ордер создан");
+        _employee = await _userService.GetByEmailAsync(_email);
 
-        _employee.Orders.Append<Order>(order);
+        if (_employee != null)
+        {
+            _employee?.Orders.Add(order);
+            try
+            {
+                await _userService.Update(_employee);
+            }
+            catch (System.Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
+            _logger.LogInformation("Order created");
+        }
+
+        _notificationManagerService.SendNotification("Notify", "ордер создан");
     }
 
     private void OrderUpdated(Order order)

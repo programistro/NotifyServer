@@ -12,7 +12,7 @@
     <!--     ContentTemplate="{DataTemplate local:MainPage}" -->
     <!--     Route="MainPage" /> -->
     
-    <FlyoutItem Title="Main page">
+    <FlyoutItem Title="Главная страница">
         <Tab>
             <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
         </Tab>

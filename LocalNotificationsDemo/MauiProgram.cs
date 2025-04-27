@@ -33,7 +33,6 @@ namespace LocalNotificationsDemo
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddScoped<HttpClient>();
-        
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterPage>();
             builder.Services.AddTransient<MainPage>();
@@ -43,6 +42,7 @@ namespace LocalNotificationsDemo
 
 #if ANDROID
             builder.Services.AddSingleton<INotificationManagerService, LocalNotificationsDemo.Platforms.Android.NotificationManagerService>();
+            builder.Services.AddSingleton<LocalNotificationsDemo.Platforms.Android.ForegroundServiceDemo>();
 #elif IOS
             builder.Services.AddSingleton<INotificationManagerService, LocalNotificationsDemo.Platforms.iOS.NotificationManagerService>();
 #elif MACCATALYST

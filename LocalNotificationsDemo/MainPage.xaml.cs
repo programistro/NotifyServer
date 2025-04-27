@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Windows.Input;
+using AXO.Core.Models;
 using LocalNotificationsDemo.Interfaces;
 using LocalNotificationsDemo.Pages;
 using LocalNotificationsDemo.Service;
@@ -22,9 +24,18 @@ namespace LocalNotificationsDemo;
 public partial class MainPage : ContentPage, INotifyPropertyChanged
 {
     INotificationManagerService notificationManager;
-    int notificationNumber = 0;
     private readonly IAuthService _authService;
     private readonly IUserService _userService;
+    private ObservableCollection<Order> _orders;
+
+    public ObservableCollection<Order> Orders
+    {
+        get => _orders;
+        set
+        {
+            _orders = value;
+        }
+    }
     
     private bool isAuthenticated;
     public bool IsAuthenticated
@@ -36,8 +47,6 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
             OnPropertyChanged(nameof(IsAuthenticated));
         }
     }
-    
-    public ICommand LogoutCommand { get; }
 
     public MainPage()
     {
@@ -62,24 +71,52 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
 
         PermissionStatus status = await Permissions.RequestAsync<NotificationPermission>();
     }
+    
+    private void OnOrderCreated(Order obj)
+    {
+        Orders.Add(obj);
+    }
 #endif
 
-    void OnSendClick(object sender, EventArgs e)
-    {
-        notificationNumber++;
-        string title = $"Local Notification #{notificationNumber}";
-        string message = $"You have now received {notificationNumber} notifications!";
-        notificationManager.SendNotification(title, message);
+    private async void MainPage_OnLoaded(object? sender, EventArgs e)
+    { 
+        var token = await SecureStorage.Default.GetAsync("jwt_token");
+
+        if (token != null)
+        {
+            IsAuthenticated = false;
+            
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+
+            var email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+
+            var user = await _userService.GetByEmailAsync(email);
+            
+            user.OrdersChanged += UserOnOrdersChanged;
+            Orders = new ObservableCollection<Order>(user.Orders);
+            
+            OnPropertyChanged(nameof(Orders));
+        }
+        else
+        {
+            IsAuthenticated = true;
+        }
     }
 
-    void OnScheduleClick(object sender, EventArgs e)
+    private void UserOnOrdersChanged(ObservableCollection<Order> sender)
     {
-        notificationNumber++;
-        string title = $"Local Notification #{notificationNumber}";
-        string message = $"You have now received {notificationNumber} notifications!";
-        notificationManager.SendNotification(title, message, DateTime.Now.AddSeconds(10));
+        Orders = sender;
+        OnPropertyChanged(nameof(Orders));
     }
 
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+    
     void ShowNotification(string title, string message)
     {
         MainThread.BeginInvokeOnMainThread(() =>
@@ -96,36 +133,5 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     {
         Routing.RegisterRoute("RegisterPage", typeof(RegisterPage));
         await Shell.Current.GoToAsync("RegisterPage");
-    }
-
-    private async void MainPage_OnLoaded(object? sender, EventArgs e)
-    { 
-        var token = await SecureStorage.Default.GetAsync("jwt_token");
-
-        if (token != null)
-        {
-            IsAuthenticated = false;
-            
-            var handler = new JwtSecurityTokenHandler();
-            var jwtToken = handler.ReadJwtToken(token);
-
-            var email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
-            var name = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.GivenName).Value;
-
-            var user = await _userService.GetByEmailAsync(email);
-            
-            OrderList.ItemsSource = user.Orders;
-        }
-        else
-        {
-            IsAuthenticated = true;
-        }
-    }
-    
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected virtual void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

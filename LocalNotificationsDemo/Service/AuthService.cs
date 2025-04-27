@@ -23,7 +23,7 @@ public class AuthService(IUserService _userService, HttpClient _httpClient) : IA
         var json = JsonSerializer.Serialize(user);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync("http://192.168.1.83:8080/Auth/register", content);
+        var response = await _httpClient.PostAsync("https://api.re.souso.ru/Auth/register", content);
         var result = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
             return null;
@@ -34,11 +34,12 @@ public class AuthService(IUserService _userService, HttpClient _httpClient) : IA
 
     public async Task<string> LoginAsync(string email, string password)
     {
-        var user = new UserDto { Email = email, Password = password};
+        var user = new UserDto { Email = email, Password = password };
         var json = JsonSerializer.Serialize(user);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync("http://192.168.1.83:8080/Auth/login", content);
+        var response = await _httpClient.PostAsync("https://api.re.souso.ru/Auth/login", content);
+        var result = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
             return null;
 

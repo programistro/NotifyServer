@@ -22,6 +22,8 @@ public partial class LoginPage : ContentPage
     {
         InitializeComponent();
 
+        BindingContext = this;
+        
         _authService = authService;
         _userService = userService;
     }
