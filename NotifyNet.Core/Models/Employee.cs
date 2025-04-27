@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -19,6 +20,11 @@ namespace AXO.Core.Models
 		{
 			var other = o as Employee;
 			return other?.Id == Id;
+		}
+
+		public Employee()
+		{
+			Orders.CollectionChanged += (s, e) => OrdersChanged?.Invoke();
 		}
 
 		public override int GetHashCode() => Id.GetHashCode();
@@ -65,7 +71,10 @@ namespace AXO.Core.Models
 		// public virtual ICollection<EmployeePermission> EmployeePermissions { get; set; }
 
 		// public virtual IEnumerable<Order> Orders { get; set; }
-		public virtual List<Order> Orders { get; set; }
+		
+		public event Action OrdersChanged;
+		
+		public virtual ObservableCollection<Order> Orders { get; set; }
 
 
 		// public virtual IEnumerable<OrderEmployee> OrderEmployees { get; set; }
