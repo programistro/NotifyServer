@@ -30,7 +30,9 @@ public class UserRepository : IUserRepository
 
     public async Task<Employee> GetByEmailAsync(string email)
     {
-        return await _context.Employees.FirstOrDefaultAsync(x => x.Email == email);
+        return await _context.Employees
+            .Include(x => x.Orders)
+            .FirstOrDefaultAsync(x => x.Email == email);
     }
 
     public async Task AddAsync(Employee user)
@@ -41,8 +43,21 @@ public class UserRepository : IUserRepository
 
     public async Task Update(Employee user)
     {
-        _context.Employees.Update(user);
+        // _context.Employees.Update(user);
+        // await _context.SaveChangesAsync();
+        
+        _context.Employees.Attach(user);
+        _context.Entry(user).State = EntityState.Modified;
         await _context.SaveChangesAsync();
+        
+        // var employee = await _context.Employees
+        //     .Include(x => x.Orders)
+        //     .AsNoTracking()
+        //     .FirstOrDefaultAsync(x => x.Id == user.Id);
+        //
+        // employee.Orders = user.Orders;
+        // _context.Employees.Update(employee);
+        // await _context.SaveChangesAsync();
     }
 
     public async Task Delete(Guid userId)
