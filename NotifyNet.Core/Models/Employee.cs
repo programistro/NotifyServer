@@ -25,7 +25,7 @@ namespace AXO.Core.Models
 		public Employee()
 		{
 			Orders = new ObservableCollection<Order>();
-			Orders.CollectionChanged += (s, e) => OrdersChanged?.Invoke();
+			Orders.CollectionChanged += (s, e) => OrdersChanged?.Invoke(Orders);
 		}
 
 		public override int GetHashCode() => Id.GetHashCode();
@@ -73,7 +73,7 @@ namespace AXO.Core.Models
 
 		// public virtual IEnumerable<Order> Orders { get; set; }
 		
-		public event Action OrdersChanged;
+		public event Action<ObservableCollection<Order>> OrdersChanged;
 		
 		public virtual ObservableCollection<Order> Orders { get; set; }
 
