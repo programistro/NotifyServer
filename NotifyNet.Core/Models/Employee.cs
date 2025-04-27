@@ -24,6 +24,7 @@ namespace AXO.Core.Models
 
 		public Employee()
 		{
+			Orders = new ObservableCollection<Order>();
 			Orders.CollectionChanged += (s, e) => OrdersChanged?.Invoke();
 		}
 
