@@ -26,6 +26,22 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     INotificationManagerService notificationManager;
     private readonly IAuthService _authService;
     private readonly IUserService _userService;
+    private string _token = string.Empty;
+    
+    private string _email = string.Empty;
+
+    public string Email
+    {
+        get { return _email; }
+        set
+        {
+            _email = value;
+            OnPropertyChanged(_email);
+        }
+    }
+    
+
+    private Employee _user;
     private ObservableCollection<Order> _orders;
 
     public ObservableCollection<Order> Orders
@@ -37,15 +53,30 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         }
     }
     
-    private bool isAuthenticated;
+    private bool _isAuthenticated;
     public bool IsAuthenticated
     {
-        get => isAuthenticated;
+        get => _isAuthenticated;
         set
         {
-            isAuthenticated = value;
+            _isAuthenticated = value;
             OnPropertyChanged(nameof(IsAuthenticated));
         }
+    }
+    
+    public ICommand OpenUrlCommand => new Command<String>(OpenUrl);
+
+    private async void OpenUrl(string obj)
+    {
+        await Browser.OpenAsync(obj);
+    }
+
+    public ICommand AuthCommand => new Command(Login);
+
+    private async void Login()
+    {
+        Routing.RegisterRoute("LoginPage", typeof(LoginPage));
+        await Shell.Current.GoToAsync("LoginPage");
     }
 
     public MainPage()
@@ -53,6 +84,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         InitializeComponent();
         
         BindingContext = this;
+        IsAuthenticated = false;
         
         notificationManager = IPlatformApplication.Current.Services.GetRequiredService<INotificationManagerService>();
         _authService = IPlatformApplication.Current.Services.GetRequiredService<IAuthService>();
@@ -79,27 +111,28 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
 #endif
 
     private async void MainPage_OnLoaded(object? sender, EventArgs e)
-    { 
-        var token = await SecureStorage.Default.GetAsync("jwt_token");
-
-        if (token != null)
+    {
+        if (string.IsNullOrEmpty(_token))
         {
-            IsAuthenticated = false;
+            _token = await SecureStorage.Default.GetAsync("jwt_token");
+
+            if (_token == null)
+            {
+                return;
+            }
             
             var handler = new JwtSecurityTokenHandler();
-            var jwtToken = handler.ReadJwtToken(token);
+            var jwtToken = handler.ReadJwtToken(_token);
 
-            var email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+            Email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
 
-            var user = await _userService.GetByEmailAsync(email);
+            _user = await _userService.GetByEmailAsync(Email);
             
-            user.OrdersChanged += UserOnOrdersChanged;
-            Orders = new ObservableCollection<Order>(user.Orders);
+            _user.OrdersChanged += UserOnOrdersChanged;
+            Orders = new ObservableCollection<Order>(_user.Orders);
             
             OnPropertyChanged(nameof(Orders));
-        }
-        else
-        {
+            
             IsAuthenticated = true;
         }
     }
@@ -131,7 +164,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
 
     private async void Button_OnClicked(object? sender, EventArgs e)
     {
-        Routing.RegisterRoute("RegisterPage", typeof(RegisterPage));
-        await Shell.Current.GoToAsync("RegisterPage");
+        Routing.RegisterRoute("LoginPage", typeof(LoginPage));
+        await Shell.Current.GoToAsync("LoginPage");
     }
 }

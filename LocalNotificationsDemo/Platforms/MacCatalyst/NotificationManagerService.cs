@@ -22,7 +22,7 @@ public class NotificationManagerService : INotificationManagerService
         });
     }
 
-    public void SendNotification(string title, string message, DateTime? notifyTime = null)
+    public void SendNotification(string title, string message, DateTime? notifyTime = null, string link = null)
     {
         // App doesn't have permissions.
         if (!hasNotificationsPermission)

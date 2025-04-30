@@ -56,6 +56,7 @@
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.4" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.4" />
+		<PackageReference Include="Microsoft.Maui.Core" Version="9.0.14" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.8.0" />
 	</ItemGroup>
 
@@ -63,5 +64,9 @@
 	  <ProjectReference Include="..\NotifyNet.Application\NotifyNet.Application.csproj" />
 	  <ProjectReference Include="..\NotifyNet.Core\NotifyNet.Core.csproj" />
 	</ItemGroup>
+
+	<PropertyGroup>
+		<EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+	</PropertyGroup>
 
 </Project>

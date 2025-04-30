@@ -1,9 +1,11 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Graphics;
+using Android.Net;
 using Android.OS;
 using AndroidX.Core.App;
 using Microsoft.Maui.ApplicationModel;
+using Uri = Android.Net.Uri;
 
 namespace LocalNotificationsDemo.Platforms.Android;
 
@@ -36,7 +38,7 @@ public class NotificationManagerService : INotificationManagerService
         }
     }
 
-    public void SendNotification(string title, string message, DateTime? notifyTime = null)
+    public void SendNotification(string title, string message, DateTime? notifyTime = null, string link = null)
     {
         if (!channelInitialized)
         {
@@ -58,6 +60,27 @@ public class NotificationManagerService : INotificationManagerService
             long triggerTime = GetNotifyTime(notifyTime.Value);
             AlarmManager alarmManager = Platform.AppContext.GetSystemService(Context.AlarmService) as AlarmManager;
             alarmManager.Set(AlarmType.RtcWakeup, triggerTime, pendingIntent);
+        }
+        else if (link != null)
+        {
+            Intent intent = new Intent(Intent.ActionView);
+            intent.SetData(Uri.Parse(link));
+            intent.SetFlags(ActivityFlags.SingleTop | ActivityFlags.ClearTop);
+
+            var pendingIntentFlags = (Build.VERSION.SdkInt >= BuildVersionCodes.S)
+                ? PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Immutable
+                : PendingIntentFlags.UpdateCurrent;
+
+            PendingIntent pendingIntent = PendingIntent.GetActivity(Platform.AppContext, pendingIntentId++, intent, pendingIntentFlags);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(Platform.AppContext, channelId)
+                .SetContentIntent(pendingIntent)
+                .SetContentTitle(title)
+                .SetContentText(message)
+                .SetLargeIcon(BitmapFactory.DecodeResource(Platform.AppContext.Resources, Resource.Drawable.dotnet_logo))
+                .SetSmallIcon(Resource.Drawable.message_small);
+
+            Notification notification = builder.Build();
+            compatManager.Notify(messageId++, notification);  
         }
         else
         {

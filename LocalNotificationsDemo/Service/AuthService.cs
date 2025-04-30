@@ -13,7 +13,7 @@ using NotifyNet.Core.Dto;
 namespace LocalNotificationsDemo.Service;
 
 
-public class AuthService(IUserService _userService, HttpClient _httpClient) : IAuthService
+public class AuthService(HttpClient _httpClient) : IAuthService
 {
     public string JwtToken { get; private set; }
 

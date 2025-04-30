@@ -1,14 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:localNotificationsDemo="clr-namespace:LocalNotificationsDemo"
              x:Class="LocalNotificationsDemo.MainPage"
-             Title="Главная страница"
              Padding="10" Loaded="MainPage_OnLoaded">
-    <VerticalStackLayout x:Name="verticalStackLayout"
-                         Spacing="6">
         
-        <Button Text="Зарегистрироваться" Clicked="Button_OnClicked" HorizontalOptions="Center"
-                IsVisible="{Binding IsAuthenticated}"/>
+        <ContentPage.Resources>
+                <ResourceDictionary>
+                        <localNotificationsDemo:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+                </ResourceDictionary>
+        </ContentPage.Resources>
+        
+        <Shell.TitleView>
+                <Grid>
+                        <Label Text="{Binding Email}" 
+                               VerticalOptions="Center"
+                               HorizontalOptions="End"
+                               Margin="15"
+                               FontSize="16" IsVisible="{Binding IsAuthenticated}">
+                                <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding OpenUrlCommand}" 
+                                                              CommandParameter="https://re.souso.ru/"/>
+                                </Label.GestureRecognizers>
+                        </Label>
+                        <Label Text="Войти"
+                               FontSize="16"
+                               VerticalOptions="Center" HorizontalOptions="End" 
+                               Margin="15, 15, 20 ,17" IsVisible="{Binding IsAuthenticated, Converter={StaticResource InverseBooleanConverter}}">
+                                <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding AuthCommand}"/>
+                                </Label.GestureRecognizers>
+                        </Label>
+                </Grid>
+        </Shell.TitleView>
+        
+        <VerticalStackLayout x:Name="verticalStackLayout"
+                             Spacing="6">
+                
+                <!-- <Button Text="Войти" Clicked="Button_OnClicked" HorizontalOptions="Center" -->
+                <!--         IsVisible="{Binding IsAuthenticated}"/> -->
         
         <ListView x:Name="OrderList" IsVisible="{Binding !IsAuthenticated}" ItemsSource="{Binding Orders}">
                 <ListView.ItemTemplate>
@@ -24,14 +54,5 @@
                         </DataTemplate>
                 </ListView.ItemTemplate>
         </ListView>
-        
-        <!-- <Button Text="Create Notification" -->
-        <!--         HorizontalOptions="Center" -->
-        <!--         VerticalOptions="Start" -->
-        <!--         Clicked="OnSendClick" /> -->
-        <!-- <Button Text="Create Notification" -->
-        <!--         HorizontalOptions="Center" -->
-        <!--         VerticalOptions="Start" -->
-        <!--         Clicked="OnScheduleClick" /> -->
     </VerticalStackLayout>
 </ContentPage>

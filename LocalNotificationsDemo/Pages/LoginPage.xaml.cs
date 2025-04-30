@@ -37,8 +37,11 @@ public partial class LoginPage : ContentPage
             _authService.SetAuthHeader();
             await SecureStorage.Default.SetAsync("jwt_token", token);
             
-            Routing.RegisterRoute("MainPage", typeof(MainPage));
-            await Shell.Current.GoToAsync("MainPage");
+            await Shell.Current.GoToAsync("..");
+        }
+        else
+        {
+            await DisplayAlert("Ошибка", "Не верный логин или пароль", "OK");
         }
     }
 }

@@ -36,9 +36,9 @@ namespace LocalNotificationsDemo
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterPage>();
             builder.Services.AddTransient<MainPage>();
-#if DEBUG
+// #if DEBUG
             builder.Logging.AddDebug();
-#endif
+// #endif
 
 #if ANDROID
             builder.Services.AddSingleton<INotificationManagerService, LocalNotificationsDemo.Platforms.Android.NotificationManagerService>();

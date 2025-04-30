@@ -91,6 +91,7 @@ public class ForegroundServiceDemo : global::Android.App.Service
                 var jwtToken = handler.ReadJwtToken(_token);
 
                 _email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+                _employee = await _userService.GetByEmailAsync(_email);
             }
 
             _hubConnection.Closed += async (error) =>
@@ -145,8 +146,6 @@ public class ForegroundServiceDemo : global::Android.App.Service
 
     private async void OrderCreated(Order order)
     {
-        _employee = await _userService.GetByEmailAsync(_email);
-
         if (_employee != null)
         {
             _employee?.Orders.Add(order);
@@ -162,7 +161,7 @@ public class ForegroundServiceDemo : global::Android.App.Service
             _logger.LogInformation("Order created");
         }
 
-        _notificationManagerService.SendNotification("Notify", "ордер создан");
+        _notificationManagerService.SendNotification("Notify", "ордер создан", link: "https://re.souso.ru/notifications");
     }
 
     private void OrderUpdated(Order order)
