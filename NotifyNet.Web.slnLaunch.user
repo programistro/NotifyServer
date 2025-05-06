@@ -1,0 +1,17 @@
+[
+  {
+    "Name": "Новый профиль",
+    "Projects": [
+      {
+        "Path": "NotifyNet.Web\\NotifyNet.Web.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "LocalNotificationsDemo\\LocalNotificationsDemo.csproj",
+        "Action": "Start",
+        "DebugTarget": "Samsung SM-A346E (Android 14.0\u00A0— API 34)"
+      }
+    ]
+  }
+]
