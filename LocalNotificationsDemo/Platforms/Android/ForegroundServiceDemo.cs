@@ -36,6 +36,7 @@ public class ForegroundServiceDemo : global::Android.App.Service
     private HubConnection _hubConnection;
     private readonly ILogger<ForegroundServiceDemo> _logger;
     private readonly IUserService _userService;
+    private readonly MainPage _mainPage;
 
     private string _token { get; set; }
     private Employee _employee { get; set; }
@@ -47,6 +48,7 @@ public class ForegroundServiceDemo : global::Android.App.Service
         _notificationManagerService = MauiApplication.Current.Services.GetService<INotificationManagerService>();
         _userService = MauiApplication.Current.Services.GetService<IUserService>();
         _logger = MauiApplication.Current.Services.GetService<ILogger<ForegroundServiceDemo>>();
+        _mainPage = MauiApplication.Current.Services.GetService<MainPage>();
         _notificationManagerService.NotificationReceived += (sender, eventArgs) =>
         {
             var eventData = (NotificationEventArgs)eventArgs;
@@ -92,6 +94,8 @@ public class ForegroundServiceDemo : global::Android.App.Service
 
                 _email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
                 _employee = await _userService.GetByEmailAsync(_email);
+
+                _employee.OrdersChanged += _mainPage.UserOnOrdersChanged;
             }
 
             _hubConnection.Closed += async (error) =>
@@ -133,7 +137,6 @@ public class ForegroundServiceDemo : global::Android.App.Service
                 Log.Info("wdwa", "OnStartCommand: Restarting the timer.");
                 StopForeground(StopForegroundFlags.Remove);
                 StopSelf();
-
             }
             else if (intent.Action.Equals(Constants.ACTION_RESTART_TIMER))
             {
@@ -157,6 +160,8 @@ public class ForegroundServiceDemo : global::Android.App.Service
 
                 _email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
                 _employee = await _userService.GetByEmailAsync(_email);
+                
+                _employee.OrdersChanged += _mainPage.UserOnOrdersChanged;
             }
         }
         else

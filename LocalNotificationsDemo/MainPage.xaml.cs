@@ -173,7 +173,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         // }
     }
 
-    private void UserOnOrdersChanged(ObservableCollection<Order> sender)
+    public void UserOnOrdersChanged(ObservableCollection<Order> sender)
     {
         Orders = sender;
         OnPropertyChanged(nameof(Orders));
