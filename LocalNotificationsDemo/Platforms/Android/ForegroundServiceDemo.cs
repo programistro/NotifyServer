@@ -146,7 +146,20 @@ public class ForegroundServiceDemo : global::Android.App.Service
 
     private async void OrderCreated(Order order)
     {
-        if (_employee != null)
+        if (_employee == null)
+        {
+            _token = await SecureStorage.Default.GetAsync("jwt_token");
+
+            if (_token != null)
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(_token);
+
+                _email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+                _employee = await _userService.GetByEmailAsync(_email);
+            }
+        }
+        else
         {
             _employee?.Orders.Add(order);
             try
@@ -159,9 +172,9 @@ public class ForegroundServiceDemo : global::Android.App.Service
                 throw;
             }
             _logger.LogInformation("Order created");
-        }
 
-        _notificationManagerService.SendNotification("Notify", "ордер создан", link: "https://re.souso.ru/notifications");
+            _notificationManagerService.SendNotification("Notify", "ордер создан", link: "https://re.souso.ru/notifications");
+        }
     }
 
     private void OrderUpdated(Order order)

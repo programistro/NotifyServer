@@ -105,41 +105,41 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     protected override async void OnAppearing()
     {
         // base.OnAppearing();
-        //
+        
         PermissionStatus status = await Permissions.RequestAsync<NotificationPermission>();
-        //
+        
         if (string.IsNullOrEmpty(_token))
         {
-        _token = await SecureStorage.Default.GetAsync("jwt_token");
-        //
-        if (_token == null)
-        {
-            return;
-        }
-        //     
-        var handler = new JwtSecurityTokenHandler();
-        var jwtToken = handler.ReadJwtToken(_token);
-        //
-        Email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
-        
-        // _user = _conetxt.Employees.FirstOrDefault(u => u.Email == Email);
+            _token = await SecureStorage.Default.GetAsync("jwt_token");
+            //
+            if (_token == null)
+            {
+                return;
+            }
 
-        _httpClient.DefaultRequestHeaders.Accept.Clear();
-        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        
-        var respone = await _httpClient.GetAsync($"https://api.re.souso.ru/User/get-user-by-email?email={Email}");
-        _user = await respone.Content.ReadFromJsonAsync<Employee>();
-        
+            //   
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(_token);
             
+            Email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+
+            // _user = _conetxt.Employees.FirstOrDefault(u => u.Email == Email);
+
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var respone = await _httpClient.GetAsync($"https://api.re.souso.ru/User/get-user-by-email?email={Email}");
+            _user = await respone.Content.ReadFromJsonAsync<Employee>();
+
             _user.OrdersChanged += UserOnOrdersChanged;
             Orders = new ObservableCollection<Order>(_user.Orders);
-            
+
             OnPropertyChanged(nameof(Orders));
-            
+
             IsAuthenticated = true;
         }
     }
-    
+
     private void OnOrderCreated(Order obj)
     {
         Orders.Add(obj);
