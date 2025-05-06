@@ -17,7 +17,7 @@
                                VerticalOptions="Center"
                                HorizontalOptions="End"
                                Margin="15"
-                               FontSize="16" IsVisible="{Binding IsAuthenticated}">
+                               FontSize="16">
                                 <Label.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding OpenUrlCommand}" 
                                                               CommandParameter="https://re.souso.ru/"/>

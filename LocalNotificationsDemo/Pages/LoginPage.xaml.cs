@@ -16,16 +16,14 @@ public partial class LoginPage : ContentPage
     public string Password { get; set; }
     
     private readonly IAuthService _authService;
-    private readonly IUserService _userService;
 
-    public LoginPage(IAuthService authService, IUserService userService)
+    public LoginPage(IAuthService authService)
     {
         InitializeComponent();
 
         BindingContext = this;
         
         _authService = authService;
-        _userService = userService;
     }
 
     private async void Login_OnClick(object? sender, EventArgs e)

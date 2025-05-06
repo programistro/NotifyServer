@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Windows.Input;
 using AXO.Core.Models;
@@ -14,7 +16,9 @@ using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
+using Microsoft.Net.Http.Headers;
 using NotifyNet.Application.Interface;
+using NotifyNet.Infrastructure.Data;
 #if ANDROID
 using LocalNotificationsDemo.Platforms.Android;
 #endif
@@ -26,6 +30,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     INotificationManagerService notificationManager;
     private readonly IAuthService _authService;
     private readonly IUserService _userService;
+    private readonly HttpClient _httpClient;
     private string _token = string.Empty;
     
     private string _email = string.Empty;
@@ -36,7 +41,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         set
         {
             _email = value;
-            OnPropertyChanged(_email);
+            OnPropertyChanged(nameof(Email));
         }
     }
     
@@ -86,8 +91,8 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         BindingContext = this;
         IsAuthenticated = false;
         
+        _httpClient = IPlatformApplication.Current.Services.GetService<HttpClient>();
         notificationManager = IPlatformApplication.Current.Services.GetRequiredService<INotificationManagerService>();
-        _authService = IPlatformApplication.Current.Services.GetRequiredService<IAuthService>();
         _userService = IPlatformApplication.Current.Services.GetRequiredService<IUserService>();
         notificationManager.NotificationReceived += (sender, eventArgs) =>
         {
@@ -99,9 +104,40 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
 #if ANDROID
     protected override async void OnAppearing()
     {
-        base.OnAppearing();
-
+        // base.OnAppearing();
+        //
         PermissionStatus status = await Permissions.RequestAsync<NotificationPermission>();
+        //
+        if (string.IsNullOrEmpty(_token))
+        {
+        _token = await SecureStorage.Default.GetAsync("jwt_token");
+        //
+        if (_token == null)
+        {
+            return;
+        }
+        //     
+        var handler = new JwtSecurityTokenHandler();
+        var jwtToken = handler.ReadJwtToken(_token);
+        //
+        Email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+        
+        // _user = _conetxt.Employees.FirstOrDefault(u => u.Email == Email);
+
+        _httpClient.DefaultRequestHeaders.Accept.Clear();
+        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        
+        var respone = await _httpClient.GetAsync($"https://api.re.souso.ru/User/get-user-by-email?email={Email}");
+        _user = await respone.Content.ReadFromJsonAsync<Employee>();
+        
+            
+            _user.OrdersChanged += UserOnOrdersChanged;
+            Orders = new ObservableCollection<Order>(_user.Orders);
+            
+            OnPropertyChanged(nameof(Orders));
+            
+            IsAuthenticated = true;
+        }
     }
     
     private void OnOrderCreated(Order obj)
@@ -112,29 +148,29 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
 
     private async void MainPage_OnLoaded(object? sender, EventArgs e)
     {
-        if (string.IsNullOrEmpty(_token))
-        {
-            _token = await SecureStorage.Default.GetAsync("jwt_token");
-
-            if (_token == null)
-            {
-                return;
-            }
-            
-            var handler = new JwtSecurityTokenHandler();
-            var jwtToken = handler.ReadJwtToken(_token);
-
-            Email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
-
-            _user = await _userService.GetByEmailAsync(Email);
-            
-            _user.OrdersChanged += UserOnOrdersChanged;
-            Orders = new ObservableCollection<Order>(_user.Orders);
-            
-            OnPropertyChanged(nameof(Orders));
-            
-            IsAuthenticated = true;
-        }
+        // if (string.IsNullOrEmpty(_token))
+        // {
+        //     _token = await SecureStorage.Default.GetAsync("jwt_token");
+        //
+        //     if (_token == null)
+        //     {
+        //         return;
+        //     }
+        //     
+        //     var handler = new JwtSecurityTokenHandler();
+        //     var jwtToken = handler.ReadJwtToken(_token);
+        //
+        //     Email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+        //
+        //     _user = await _userService.GetByEmailAsync(Email);
+        //     
+        //     _user.OrdersChanged += UserOnOrdersChanged;
+        //     Orders = new ObservableCollection<Order>(_user.Orders);
+        //     
+        //     OnPropertyChanged(nameof(Orders));
+        //     
+        //     IsAuthenticated = true;
+        // }
     }
 
     private void UserOnOrdersChanged(ObservableCollection<Order> sender)
