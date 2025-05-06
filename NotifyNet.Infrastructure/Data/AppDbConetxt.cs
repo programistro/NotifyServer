@@ -14,6 +14,6 @@ public class AppDbConetxt : IdentityDbContext<Employee, IdentityRole<Guid>, Guid
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // optionsBuilder.UseNpgsql("host=localhost;port=5432;Username=postgres;Password=post;Database=postgres");
-        optionsBuilder.UseNpgsql("host=83.222.17.62.62;port=5432;Username=postgres;Password=LapinBoss2022!;Database=postgres");
+        optionsBuilder.UseNpgsql("host=83.222.17.62;port=5432;Username=postgres;Password=LapinBoss2022!;Database=postgres");
     }
 }
