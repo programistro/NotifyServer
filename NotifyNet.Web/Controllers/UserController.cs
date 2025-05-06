@@ -81,6 +81,13 @@ public class UserController : ControllerBase
     [HttpPost("create-user")]
     public async Task<IActionResult> CreateUser(UserDto dto)
     {
+        var findUser = await _userService.GetByEmailAsync(dto.Email);
+
+        if (findUser != null)
+        {
+            return BadRequest("user already exists");
+        }
+        
         var user = await _userService.AddAsync(dto);
 
         return Ok(user);

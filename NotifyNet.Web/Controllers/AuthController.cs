@@ -26,6 +26,13 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register(UserDto dto)
     {
+        var findUser = await _userService.GetByEmailAsync(dto.Email);
+
+        if (findUser != null)
+        {
+            return BadRequest("user already exists");
+        }
+        
         var user = await _userService.AddAsync(dto);
 
         if (user == null)
