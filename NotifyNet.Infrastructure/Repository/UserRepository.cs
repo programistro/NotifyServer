@@ -17,21 +17,18 @@ public class UserRepository : IUserRepository
     public async Task<Employee> GetByIdAsync(Guid employeeId)
     {
         return await _context.Employees
-            .Include(x => x.Id)
             .FirstOrDefaultAsync(x => x.Id == employeeId);
     }
 
     public async Task<Employee> GetByNameAsync(string name)
     {
         return await _context.Employees
-            .Include(x => x.Name)
             .FirstOrDefaultAsync(x => x.Name == name);
     }
 
     public async Task<Employee> GetByEmailAsync(string email)
     {
         return await _context.Employees
-            .Include(x => x.Email)
             .FirstOrDefaultAsync(x => x.Email == email);
     }
 
