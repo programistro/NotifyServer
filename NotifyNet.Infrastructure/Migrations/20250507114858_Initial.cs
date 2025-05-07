@@ -60,7 +60,6 @@ namespace NotifyNet.Infrastructure.Migrations
                     DescriptionOfWork = table.Column<string>(type: "text", nullable: false),
                     DateWorkStatus = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     DateOfClose = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    EmployeeId = table.Column<Guid>(type: "uuid", nullable: true),
                     Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -70,16 +69,16 @@ namespace NotifyNet.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Orders__Employees_EmployeeId",
-                        column: x => x.EmployeeId,
+                        name: "FK_Orders__Employees_EmployeeApplicantId",
+                        column: x => x.EmployeeApplicantId,
                         principalTable: "_Employees",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_EmployeeId",
+                name: "IX_Orders_EmployeeApplicantId",
                 table: "Orders",
-                column: "EmployeeId");
+                column: "EmployeeApplicantId");
         }
 
         /// <inheritdoc />

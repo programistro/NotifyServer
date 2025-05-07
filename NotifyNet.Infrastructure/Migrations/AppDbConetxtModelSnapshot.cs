@@ -129,9 +129,6 @@ namespace NotifyNet.Infrastructure.Migrations
                     b.Property<Guid?>("EmployeeExecuterId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("EmployeeId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid?>("EmployeeNotificationId")
                         .HasColumnType("uuid");
 
@@ -166,7 +163,7 @@ namespace NotifyNet.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("EmployeeApplicantId");
 
                     b.ToTable("Orders");
                 });
@@ -175,7 +172,7 @@ namespace NotifyNet.Infrastructure.Migrations
                 {
                     b.HasOne("AXO.Core.Models.Employee", null)
                         .WithMany("Orders")
-                        .HasForeignKey("EmployeeId");
+                        .HasForeignKey("EmployeeApplicantId");
                 });
 
             modelBuilder.Entity("AXO.Core.Models.Employee", b =>

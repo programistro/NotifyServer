@@ -11,6 +11,14 @@ public class AppDbConetxt : DbContext
     
     public DbSet<Employee> _Employees => Set<Employee>();
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Employee>()
+            .HasMany(e => e.Orders)
+            .WithOne()
+            .HasForeignKey(o => o.EmployeeApplicantId);
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // optionsBuilder.UseNpgsql("host=localhost;port=5432;Username=postgres;Password=post;Database=postgres");
