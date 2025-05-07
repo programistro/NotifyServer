@@ -16,7 +16,16 @@ public class AppDbConetxt : DbContext
         modelBuilder.Entity<Employee>()
             .HasMany(e => e.Orders)
             .WithOne()
-            .HasForeignKey(o => o.EmployeeApplicantId);
+            .HasForeignKey(o => o.EmployeeApplicantId)
+            .HasForeignKey(o => o.SupportId)
+            .HasForeignKey(o => o.BuildingId)
+            .HasForeignKey(o => o.ProcessId)
+            .HasForeignKey(o => o.RecordId)
+            .HasForeignKey(o => o.DivisionId)
+            .HasForeignKey(o => o.EmployeeNotificationId)
+            .HasForeignKey(o => o.EmployeeDispatcherId)
+            .HasForeignKey(o => o.EmployeeExecuterId)
+            .HasForeignKey(o => o.EquipmentId);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
