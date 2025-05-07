@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NotifyNet.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbConetxt))]
-    [Migration("20250507110859_Initial")]
+    [Migration("20250507112351_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
