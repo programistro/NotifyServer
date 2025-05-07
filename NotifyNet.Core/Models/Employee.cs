@@ -7,20 +7,30 @@ using System.Globalization;
 // using AXO.Core.Models.Guide;
 // using AXO.Core.Models.Library;
 using Microsoft.AspNetCore.Identity;
+using MudBlazor;
 using static MudBlazor.Colors;
 
 namespace AXO.Core.Models
 {
-	public class Employee : IdentityUser<Guid>
+	public class Employee
 	{
+		[Key]
+		public Guid Id { get; set; }
+		
+		public string Email { get; set; }
+		
+		public string PasswordHash { get; set; }
+		
+		public string UserName { get; set; }
+		
 		public bool? IsCollectiveAccount { get; set; } = false;
 
 		/*** Переопределено для MudSelect multiple ***/
-		public override bool Equals(object o)
-		{
-			var other = o as Employee;
-			return other?.Id == Id;
-		}
+		// public override bool Equals(object o)
+		// {
+		// 	var other = o as Employee;
+		// 	// return other?.Id == Id;
+		// }
 
 		public Employee()
 		{
@@ -28,7 +38,7 @@ namespace AXO.Core.Models
 			Orders.CollectionChanged += (s, e) => OrdersChanged?.Invoke(Orders);
 		}
 
-		public override int GetHashCode() => Id.GetHashCode();
+		// public override int GetHashCode() => Id.GetHashCode();
 
 		public override string ToString() => Name;
 
@@ -63,11 +73,11 @@ namespace AXO.Core.Models
 
 		public DateTime Created { get; set; }
 
-		public virtual ICollection<IdentityUserClaim<Guid>> Claims { get; set; }
+		// public virtual ICollection<IdentityUserClaim<Guid>> Claims { get; set; }
 
-		public virtual ICollection<IdentityUserLogin<Guid>> Logins { get; set; }
+		// public virtual ICollection<IdentityUserLogin<Guid>> Logins { get; set; }
 
-		public virtual ICollection<IdentityUserToken<Guid>> Tokens { get; set; }
+		// public virtual ICollection<IdentityUserToken<Guid>> Tokens { get; set; }
 
 		// public virtual ICollection<EmployeePermission> EmployeePermissions { get; set; }
 

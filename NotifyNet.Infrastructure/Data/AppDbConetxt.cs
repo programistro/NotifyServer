@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace NotifyNet.Infrastructure.Data;
 
-public class AppDbConetxt : IdentityDbContext<Employee, IdentityRole<Guid>, Guid>
+public class AppDbConetxt : DbContext
 {
     public DbSet<Order> Orders => Set<Order>();
     
