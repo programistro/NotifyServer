@@ -46,7 +46,6 @@ namespace NotifyNet.Infrastructure.Migrations
                     BuildingId = table.Column<Guid>(type: "uuid", nullable: true),
                     DivisionId = table.Column<Guid>(type: "uuid", nullable: true),
                     EquipmentId = table.Column<Guid>(type: "uuid", nullable: true),
-                    SupportId = table.Column<Guid>(type: "uuid", nullable: true),
                     EventId = table.Column<Guid>(type: "uuid", nullable: true),
                     ProcessId = table.Column<Guid>(type: "uuid", nullable: true),
                     RecordId = table.Column<Guid>(type: "uuid", nullable: true),
@@ -69,16 +68,16 @@ namespace NotifyNet.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Orders__Employees_EmployeeApplicantId",
-                        column: x => x.EmployeeApplicantId,
+                        name: "FK_Orders__Employees_EquipmentId",
+                        column: x => x.EquipmentId,
                         principalTable: "_Employees",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_EmployeeApplicantId",
+                name: "IX_Orders_EquipmentId",
                 table: "Orders",
-                column: "EmployeeApplicantId");
+                column: "EquipmentId");
         }
 
         /// <inheritdoc />

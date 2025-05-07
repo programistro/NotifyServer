@@ -33,7 +33,7 @@ namespace AXO.Core.Models
 
 		// public virtual GuideEquipment Equipment { get; set; }
 
-		public Guid? SupportId { get; set; }
+		// public Guid? SupportId { get; set; }
 
 		// public virtual Support Support { get; set; }
 

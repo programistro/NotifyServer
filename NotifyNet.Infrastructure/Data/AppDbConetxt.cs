@@ -17,7 +17,6 @@ public class AppDbConetxt : DbContext
             .HasMany(e => e.Orders)
             .WithOne()
             .HasForeignKey(o => o.EmployeeApplicantId)
-            .HasForeignKey(o => o.SupportId)
             .HasForeignKey(o => o.BuildingId)
             .HasForeignKey(o => o.ProcessId)
             .HasForeignKey(o => o.RecordId)

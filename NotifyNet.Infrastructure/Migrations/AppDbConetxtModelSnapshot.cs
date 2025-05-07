@@ -155,15 +155,12 @@ namespace NotifyNet.Infrastructure.Migrations
                     b.Property<Guid?>("RecordId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("SupportId")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime?>("Updated")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeApplicantId");
+                    b.HasIndex("EquipmentId");
 
                     b.ToTable("Orders");
                 });
@@ -172,7 +169,7 @@ namespace NotifyNet.Infrastructure.Migrations
                 {
                     b.HasOne("AXO.Core.Models.Employee", null)
                         .WithMany("Orders")
-                        .HasForeignKey("EmployeeApplicantId");
+                        .HasForeignKey("EquipmentId");
                 });
 
             modelBuilder.Entity("AXO.Core.Models.Employee", b =>

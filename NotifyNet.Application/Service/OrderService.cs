@@ -97,7 +97,7 @@ public class OrderService : IOrderService
             RecordId = dto.RecordId,
             ProcessId = dto.ProcessId,
             DateOfExecution = dto.DateOfExecution,
-            SupportId = dto.SupportId,
+            // SupportId = dto.SupportId,
             DateWorkStatus = dto.DateWorkStatus,
             DescriptionOfWork = dto.DescriptionOfWork,
             DateOfClose = dto.DateOfClose,
