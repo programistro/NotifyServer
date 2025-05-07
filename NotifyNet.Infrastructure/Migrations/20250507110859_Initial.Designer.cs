@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NotifyNet.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbConetxt))]
-    [Migration("20250507110205_Initial")]
+    [Migration("20250507110859_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -81,7 +81,7 @@ namespace NotifyNet.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employees");
+                    b.ToTable("_Employees");
                 });
 
             modelBuilder.Entity("AXO.Core.Models.Order", b =>

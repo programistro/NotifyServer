@@ -12,7 +12,7 @@ namespace NotifyNet.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Employees",
+                name: "_Employees",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -33,7 +33,7 @@ namespace NotifyNet.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Employees", x => x.Id);
+                    table.PrimaryKey("PK__Employees", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -70,9 +70,9 @@ namespace NotifyNet.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Orders_Employees_EmployeeId",
+                        name: "FK_Orders__Employees_EmployeeId",
                         column: x => x.EmployeeId,
-                        principalTable: "Employees",
+                        principalTable: "_Employees",
                         principalColumn: "Id");
                 });
 
@@ -89,7 +89,7 @@ namespace NotifyNet.Infrastructure.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Employees");
+                name: "_Employees");
         }
     }
 }

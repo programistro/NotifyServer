@@ -78,7 +78,7 @@ namespace NotifyNet.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employees");
+                    b.ToTable("_Employees");
                 });
 
             modelBuilder.Entity("AXO.Core.Models.Order", b =>

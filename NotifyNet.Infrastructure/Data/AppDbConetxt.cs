@@ -9,7 +9,7 @@ public class AppDbConetxt : DbContext
 {
     public DbSet<Order> Orders => Set<Order>();
     
-    public DbSet<Employee> Employees => Set<Employee>();
+    public DbSet<Employee> _Employees => Set<Employee>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

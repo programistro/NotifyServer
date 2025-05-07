@@ -16,45 +16,45 @@ public class UserRepository : IUserRepository
     
     public async Task<Employee> GetByIdAsync(Guid employeeId)
     {
-        return await _context.Employees
+        return await _context._Employees
             .Include(x => x.Orders)
             .FirstOrDefaultAsync(x => x.Id == employeeId);
     }
 
     public async Task<Employee> GetByNameAsync(string name)
     {
-        return await _context.Employees
+        return await _context._Employees
                 .Include(x => x.Orders)
             .FirstOrDefaultAsync(x => x.Name == name);
     }
 
     public async Task<Employee> GetByEmailAsync(string email)
     {
-        return await _context.Employees
+        return await _context._Employees
             .Include(x => x.Orders)
             .FirstOrDefaultAsync(x => x.Email == email);
     }
 
     public async Task AddAsync(Employee user)
     {
-        await _context.Employees.AddAsync(user);
+        await _context._Employees.AddAsync(user);
         await _context.SaveChangesAsync();
     }
 
     public async Task Update(Employee user)
     {
-        _context.Employees.Attach(user);
+        _context._Employees.Attach(user);
         _context.Entry(user).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
 
     public async Task Delete(Guid userId)
     {
-        var user = await _context.Employees.FirstOrDefaultAsync(x => x.Id == userId);
+        var user = await _context._Employees.FirstOrDefaultAsync(x => x.Id == userId);
 
         if (user != null)
         {
-            _context.Employees.Remove(user);
+            _context._Employees.Remove(user);
         
             await _context.SaveChangesAsync();
         }
@@ -62,6 +62,6 @@ public class UserRepository : IUserRepository
 
     public async Task<IEnumerable<Employee>> GetAllAsync()
     {
-        return await _context.Employees.ToListAsync();
+        return await _context._Employees.ToListAsync();
     }
 }
