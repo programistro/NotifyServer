@@ -12,7 +12,7 @@ using static MudBlazor.Colors;
 
 namespace AXO.Core.Models
 {
-	public class Employee
+	public class Employee : IdentityUser<Guid>
 	{
 		[Key]
 		public Guid Id { get; set; }
@@ -31,6 +31,18 @@ namespace AXO.Core.Models
 		// 	var other = o as Employee;
 		// 	// return other?.Id == Id;
 		// }
+		
+		public override bool Equals(object obj)
+		{
+			if (obj is Employee other)
+			{
+				return Id == other.Id;
+			}
+			return false;
+		}
+
+		public override int GetHashCode() => Id.GetHashCode();
+
 
 		public Employee()
 		{

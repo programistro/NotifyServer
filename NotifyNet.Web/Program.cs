@@ -1,3 +1,4 @@
+using AXO.Core.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +21,14 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddDbContextFactory<AppDbConetxt>();
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = false; 
+});
+builder.Services.AddIdentity<Employee, IdentityRole<Guid>>()
+    .AddEntityFrameworkStores<AppDbConetxt>()
+    .AddSignInManager<SignInManager<Employee>>();
+
 builder.Services.AddAuthorization();
 builder.Services.AddCors();
 builder.Services.AddSignalR();
