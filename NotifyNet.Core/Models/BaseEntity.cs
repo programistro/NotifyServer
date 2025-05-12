@@ -1,7 +1,6 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace AXO.Core.Models
+namespace NotifyNet.Core.Models
 {
 	public class BaseEntity
 	{

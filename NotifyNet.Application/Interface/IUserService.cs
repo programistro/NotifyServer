@@ -1,5 +1,5 @@
-﻿using AXO.Core.Models;
-using NotifyNet.Core.Dto;
+﻿using NotifyNet.Core.Dto;
+using NotifyNet.Core.Models;
 
 namespace NotifyNet.Application.Interface;
 

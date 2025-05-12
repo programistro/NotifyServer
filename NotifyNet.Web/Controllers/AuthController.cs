@@ -1,13 +1,13 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using AXO.Core.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using NotifyNet.Application.Interface;
 using NotifyNet.Core.Dto;
+using NotifyNet.Core.Models;
 
 namespace NotifyNet.Web.Controllers;
 
@@ -17,19 +17,20 @@ public class AuthController : ControllerBase
 {
     private readonly ILogger<AuthController> _logger;
     private readonly IUserService _userService;
-    private readonly SignInManager<Employee> _signInManager;
+    private readonly UserManager<Employee> _userManager;
 
-    public AuthController(ILogger<AuthController> logger, IUserService userService, SignInManager<Employee> signInManager)
+    public AuthController(ILogger<AuthController> logger, IUserService userService,
+        UserManager<Employee> userManager)
     {
         _logger = logger;
         _userService = userService;
-        _signInManager = signInManager;
+        _userManager = userManager;
     }
 
     [HttpPost("register")]
     public async Task<IActionResult> Register(UserDto dto)
     {
-        var findUser = await _userService.GetByEmailAsync(dto.Email);
+        var findUser = await _userManager.FindByNameAsync(dto.Email);
 
         if (findUser != null)
         {
@@ -60,32 +61,40 @@ public class AuthController : ControllerBase
         return Ok(new JwtSecurityTokenHandler().WriteToken(jwt));
     }
 
-    [HttpPost("login")]
-    public async Task<IActionResult> Login(UserDto dto)
+    [HttpPost]
+    [Route("Login")]
+    public async Task<IActionResult> Login([FromBody] UserDto credentials)
     {
-        var user = await _userService.GetByEmailAsync(dto.Email);
-        
-        if(user == null)
-            return NotFound("user not found");
-
-        var result = await _signInManager.PasswordSignInAsync(user, dto.Password, true, false).ConfigureAwait(false);
-
-        if (result.Succeeded)
+        if (!ModelState.IsValid || credentials == null)
         {
-            var claims = new List<Claim> { new Claim(ClaimTypes.Name, user.Email) };
-            var jwt = new JwtSecurityToken(
-                issuer: AuthOptions.ISSUER,
-                audience: AuthOptions.AUDIENCE,
-                claims: claims,
-                expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)),
-                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(),
-                    SecurityAlgorithms.HmacSha256));
+            return new BadRequestObjectResult(new { Message = "Login failed" });
+        }
 
-            return Ok(new JwtSecurityTokenHandler().WriteToken(jwt));   
-        }
-        else
+        var identityUser = await _userManager.FindByNameAsync(credentials.Email);
+        if (identityUser == null)
         {
-            return BadRequest(new { message = "Username or password is incorrect" });
+            return new BadRequestObjectResult(new { Message = "Login failed" });
         }
+
+        var result = _userManager.PasswordHasher.VerifyHashedPassword(identityUser, identityUser.PasswordHash, credentials.Password);
+        if (result == PasswordVerificationResult.Failed)
+        {
+            return new BadRequestObjectResult(new { Message = "Login failed" });
+        }
+
+        var claims = new List<Claim>
+            {
+                new(ClaimTypes.Email, identityUser.Email),
+                new(ClaimTypes.Name, identityUser.UserName)
+            };
+
+        var claimsIdentity = new ClaimsIdentity(
+            claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+        await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            new ClaimsPrincipal(claimsIdentity));
+
+        return Ok(new { Message = "Вы авторизованы" });
     }
 }

@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-// using AXO.Core.Models.Guide;
-// using AXO.Core.Models.Library;
-using Microsoft.AspNetCore.Components.Forms;
-using MudBlazor;
-
-namespace AXO.Core.Models
+﻿
+namespace NotifyNet.Core.Models
 {
 	public class Order : BaseEntity
 	{

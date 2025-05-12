@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
-// using AXO.Core.Models.Guide;
-// using AXO.Core.Models.Library;
 using Microsoft.AspNetCore.Identity;
-using MudBlazor;
-using static MudBlazor.Colors;
 
-namespace AXO.Core.Models
+namespace NotifyNet.Core.Models
 {
 	public class Employee : IdentityUser<Guid>
 	{
@@ -85,16 +79,16 @@ namespace AXO.Core.Models
 
 		public DateTime Created { get; set; }
 
-		// public virtual ICollection<IdentityUserClaim<Guid>> Claims { get; set; }
+		public virtual ICollection<IdentityUserClaim<Guid>> Claims { get; set; }
 
-		// public virtual ICollection<IdentityUserLogin<Guid>> Logins { get; set; }
+		public virtual ICollection<IdentityUserLogin<Guid>> Logins { get; set; }
 
-		// public virtual ICollection<IdentityUserToken<Guid>> Tokens { get; set; }
+		public virtual ICollection<IdentityUserToken<Guid>> Tokens { get; set; }
 
-		// public virtual ICollection<EmployeePermission> EmployeePermissions { get; set; }
+		public virtual ICollection<EmployeePermission> EmployeePermissions { get; set; }
 
 		// public virtual IEnumerable<Order> Orders { get; set; }
-		
+
 		public event Action<ObservableCollection<Order>> OrdersChanged;
 		
 		public virtual ObservableCollection<Order> Orders { get; set; }

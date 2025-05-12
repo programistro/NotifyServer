@@ -1,35 +1,62 @@
-﻿using AXO.Core.Models;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NotifyNet.Core.Models;
 
 namespace NotifyNet.Infrastructure.Data;
 
-public class AppDbConetxt : DbContext
+public class AppDbConetxt : IdentityDbContext<
+        Employee, Permission, Guid,
+        IdentityUserClaim<Guid>, EmployeePermission, IdentityUserLogin<Guid>,
+        IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
 {
     public DbSet<Order> Orders => Set<Order>();
-    
+
     public DbSet<Employee> _Employees => Set<Employee>();
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        modelBuilder.Entity<Employee>()
-            .HasMany(e => e.Orders)
+        base.OnModelCreating(builder);
+
+        builder.Entity<Employee>().ToTable("_Employees");
+            
+        builder.Entity<Employee>().HasMany(e => e.Claims)
             .WithOne()
-            .HasForeignKey(o => o.EmployeeApplicantId)
-            .HasForeignKey(o => o.BuildingId)
-            .HasForeignKey(o => o.ProcessId)
-            .HasForeignKey(o => o.RecordId)
-            .HasForeignKey(o => o.DivisionId)
-            .HasForeignKey(o => o.EmployeeNotificationId)
-            .HasForeignKey(o => o.EmployeeDispatcherId)
-            .HasForeignKey(o => o.EmployeeExecuterId)
-            .HasForeignKey(o => o.EquipmentId);
+            .HasForeignKey(uc => uc.UserId)
+            .IsRequired();
+
+        builder.Entity<Employee>().HasMany(e => e.Logins)
+            .WithOne()
+            .HasForeignKey(ul => ul.UserId)
+            .IsRequired();
+
+        builder.Entity<Employee>().HasMany(e => e.Tokens)
+            .WithOne()
+            .HasForeignKey(ut => ut.UserId)
+            .IsRequired();
+
+        builder.Entity<Employee>().HasMany(e => e.EmployeePermissions)
+            .WithOne(d => d.Employee)
+            .HasForeignKey(ur => ur.UserId)
+            .IsRequired();
+
+        builder.Entity<Permission>().ToTable("_Permissions");
+
+        builder.Entity<Permission>().HasMany(e => e.EmployeePermissions)
+            .WithOne(e => e.Permission)
+            .HasForeignKey(ur => ur.RoleId)
+            .IsRequired();
+
+        builder.Entity<EmployeePermission>().ToTable("_EmployeePermissions");
+        builder.Entity<IdentityUserClaim<Guid>>().ToTable("_EmployeeClaims");
+        builder.Entity<IdentityUserLogin<Guid>>().ToTable("_EmployeeLogins");
+        builder.Entity<IdentityUserToken<Guid>>().ToTable("_EmployeeTokens");
+        builder.Entity<IdentityRoleClaim<Guid>>().ToTable("_PermissionClaims");
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        // optionsBuilder.UseNpgsql("host=localhost;port=5432;Username=postgres;Password=post;Database=postgres");
-        optionsBuilder.UseNpgsql("host=83.222.17.62;port=5432;Username=postgres;Password=LapinBoss2022!;Database=RE");
+        optionsBuilder.UseNpgsql("host=localhost;port=5432;Username=postgres;Password=***;Database=RE");
+        //optionsBuilder.UseNpgsql("host=83.222.17.62;port=5432;Username=postgres;Password=LapinBoss2022!;Database=RE");
     }
 }

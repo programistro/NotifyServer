@@ -1,4 +1,4 @@
-﻿using AXO.Core.Models;
+﻿using NotifyNet.Core.Models;
 
 namespace NotifyNet.Core.Interface;
 

@@ -1,6 +1,6 @@
-﻿using AXO.Core.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using NotifyNet.Core.Interface;
+using NotifyNet.Core.Models;
 using NotifyNet.Infrastructure.Data;
 
 namespace NotifyNet.Infrastructure.Repository;

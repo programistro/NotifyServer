@@ -1,7 +1,6 @@
-﻿using AXO.Core.Models;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using NotifyNet.Application.Interface;
-using NotifyNet.Infrastructure.Data;
+using NotifyNet.Core.Models;
 using NotifyNet.Web.Hubs;
 
 namespace NotifyNet.Web.Service;

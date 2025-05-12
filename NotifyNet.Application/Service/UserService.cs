@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Security.Cryptography;
 using System.Text;
-using AXO.Core.Models;
 using Microsoft.Extensions.Logging;
 using NotifyNet.Application.Interface;
 using NotifyNet.Core.Dto;
 using NotifyNet.Core.Interface;
+using NotifyNet.Core.Models;
 
 namespace NotifyNet.Application.Service;
 

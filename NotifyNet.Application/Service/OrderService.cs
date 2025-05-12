@@ -1,9 +1,8 @@
-﻿using AXO.Core.Models;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using NotifyNet.Application.Interface;
 using NotifyNet.Core.Dto;
 using NotifyNet.Core.Interface;
-using NotifyNet.Infrastructure.Repository;
+using NotifyNet.Core.Models;
 
 namespace NotifyNet.Application.Service;
 
