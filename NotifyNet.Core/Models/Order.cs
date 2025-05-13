@@ -1,4 +1,6 @@
 ﻿
+using System.Text.Json.Serialization;
+
 namespace NotifyNet.Core.Models
 {
 	public class Order : BaseEntity
@@ -7,6 +9,9 @@ namespace NotifyNet.Core.Models
 
 		/* Блок "Формирования записи" */
 		public Guid? EmployeeApplicantId { get; set; }
+		
+		[JsonIgnore]
+		public Employee Employee { get; set; }
 
 		// public virtual Employee EmployeeApplicant { get; set; }
 

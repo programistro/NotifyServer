@@ -39,6 +39,11 @@ public class AppDbConetxt : IdentityDbContext<
             .WithOne(d => d.Employee)
             .HasForeignKey(ur => ur.UserId)
             .IsRequired();
+        builder.Entity<Order>()
+            .HasOne(o => o.Employee)
+            .WithMany(e => e.Orders)
+            .HasForeignKey(o => o.EmployeeApplicantId)
+            .IsRequired();
 
         builder.Entity<Permission>().ToTable("_Permissions");
 
@@ -56,7 +61,7 @@ public class AppDbConetxt : IdentityDbContext<
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql("host=localhost;port=5432;Username=postgres;Password=***;Database=RE");
-        //optionsBuilder.UseNpgsql("host=83.222.17.62;port=5432;Username=postgres;Password=LapinBoss2022!;Database=RE");
+        // optionsBuilder.UseNpgsql("host=localhost;port=5432;Username=postgres;Password=***;Database=RE");
+        optionsBuilder.UseNpgsql("host=83.222.17.62;port=5432;Username=postgres;Password=LapinBoss2022!;Database=RE");
     }
 }
