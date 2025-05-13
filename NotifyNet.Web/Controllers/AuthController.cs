@@ -103,6 +103,6 @@ public class AuthController : ControllerBase
             signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(),
                 SecurityAlgorithms.HmacSha256));
 
-        return Ok(jwt);
+        return Ok(new JwtSecurityTokenHandler().WriteToken(jwt));
     }
 }
