@@ -7,17 +7,18 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Windows.Input;
-using AXO.Core.Models;
 using LocalNotificationsDemo.Interfaces;
 using LocalNotificationsDemo.Pages;
 using LocalNotificationsDemo.Service;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
 using Microsoft.Net.Http.Headers;
 using NotifyNet.Application.Interface;
+using NotifyNet.Core.Models;
 using NotifyNet.Infrastructure.Data;
 #if ANDROID
 using LocalNotificationsDemo.Platforms.Android;
@@ -27,6 +28,7 @@ namespace LocalNotificationsDemo;
 
 public partial class MainPage : ContentPage, INotifyPropertyChanged
 {
+    private readonly ILogger<MainPage> _logger;
     INotificationManagerService notificationManager;
     private readonly IAuthService _authService;
     private readonly IUserService _userService;
@@ -102,7 +104,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     }
 
 #if ANDROID
-    protected override async void OnAppearing()
+   protected override async void OnAppearing()
     {
         // base.OnAppearing();
         
@@ -116,10 +118,10 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
             {
                 return;
             }
-
             //   
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(_token);
+
             
             Email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
 
@@ -139,12 +141,12 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
             IsAuthenticated = true;
         }
     }
+#endif
 
     private void OnOrderCreated(Order obj)
     {
         Orders.Add(obj);
     }
-#endif
 
     private async void MainPage_OnLoaded(object? sender, EventArgs e)
     {

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AXO.Core.Models;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using NotifyNet.Core.Dto;
+using NotifyNet.Core.Models;
 
 namespace LocalNotificationsDemo.Service;
 
@@ -17,7 +17,8 @@ public class OrderBackgroundService : BackgroundService
     private readonly INotificationManagerService _notificationManagerService;
     private HubConnection _hubConnection;
 
-    public OrderBackgroundService(ILogger<OrderBackgroundService> logger, INotificationManagerService notificationManagerService)
+    public OrderBackgroundService(ILogger<OrderBackgroundService> logger,
+        INotificationManagerService notificationManagerService)
     {
         _logger = logger;
         _notificationManagerService = notificationManagerService;

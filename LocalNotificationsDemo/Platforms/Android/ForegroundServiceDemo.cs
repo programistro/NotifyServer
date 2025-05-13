@@ -4,7 +4,7 @@ using Android.Nfc;
 using Android.OS;
 using Android.Util;
 using AndroidX.Core.App;
-using AXO.Core.Models;
+using NotifyNet.Core.Models;
 using Java.Lang;
 using Java.Util.Logging;
 using Microsoft.AspNetCore.SignalR.Client;

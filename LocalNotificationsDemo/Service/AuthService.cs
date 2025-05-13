@@ -5,7 +5,6 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AXO.Core.Models;
 using LocalNotificationsDemo.Interfaces;
 using NotifyNet.Application.Interface;
 using NotifyNet.Core.Dto;
