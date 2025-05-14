@@ -4,7 +4,7 @@ namespace NotifyNet.Core.Dto;
 
 public class OrderDto
 {
-	[MaxLength(256)] public string Name { get; set; }
+	[MaxLength(256)] public string? Name { get; set; }
 
 	public DateTime? Created { get; set; }
 
@@ -72,7 +72,7 @@ public class OrderDto
 	public DateTime? DateOfExecution { get; set; }
 
 	/* Блок "Исполнение" */
-	public string DescriptionOfWork { get; set; }
+	public string? DescriptionOfWork { get; set; }
 
 	public DateTime? DateWorkStatus { get; set; }
 

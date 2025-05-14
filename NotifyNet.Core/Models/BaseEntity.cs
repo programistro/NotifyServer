@@ -7,7 +7,7 @@ namespace NotifyNet.Core.Models
 		public Guid Id { get; set; }
 
 		[MaxLength(256)]
-		public string Name { get; set; }
+		public string? Name { get; set; }
 
 		public DateTime? Created { get; set; }
 

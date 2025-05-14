@@ -8,6 +8,7 @@ using NotifyNet.Core.Models;
 using NotifyNet.Infrastructure.Data;
 using NotifyNet.Infrastructure.Repository;
 using NotifyNet.Web.Hubs;
+using NotifyNet.Web.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,10 +19,12 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddSingleton<CheckerBackgroundService>();
+builder.Services.AddHostedService(provider => provider.GetRequiredService<CheckerBackgroundService>());
 builder.Services.AddDbContext<AppDbConetxt>();
 
 builder.Services.AddIdentity<Employee, Permission>(options =>
-{ // меняем валидацию пароля
+{
     options.Password.RequireDigit = false;
     options.Password.RequireLowercase = false;
     options.Password.RequireNonAlphanumeric = false;
@@ -41,10 +44,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(options =>
     {
         options.Cookie.HttpOnly = true;
-        options.ExpireTimeSpan = TimeSpan.FromDays(90); // Настраиваем срок жизни куки
+        options.ExpireTimeSpan = TimeSpan.FromDays(90); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
         options.LoginPath = "/login";
         options.AccessDeniedPath = "/Account/AccessDenied";
-        options.SlidingExpiration = true; // Опция для обновления срока действия куки при активности пользователя
+        options.SlidingExpiration = true; // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     });
 
 builder.Services.AddAuthorization();

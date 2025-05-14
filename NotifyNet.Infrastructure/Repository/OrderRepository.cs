@@ -44,6 +44,7 @@ public class OrderRepository : IOrderRepository
 
     public async Task<IEnumerable<Order>> GetAllAsync()
     {
-        return await _context.Orders.ToListAsync();
+        return await _context.Orders
+            .ToListAsync();
     }
 }

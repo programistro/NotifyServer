@@ -11,7 +11,7 @@ namespace NotifyNet.Core.Models
 		public Guid? EmployeeApplicantId { get; set; }
 		
 		[JsonIgnore]
-		public Employee Employee { get; set; }
+		public Employee? Employee { get; set; }
 
 		// public virtual Employee EmployeeApplicant { get; set; }
 
@@ -48,7 +48,7 @@ namespace NotifyNet.Core.Models
 
 		// public virtual Employee EmployeeDispatcher { get; set; }
 
-		public string DescriptionDispathcer { get; set; }
+		public string? DescriptionDispathcer { get; set; }
 
 		public Guid? EmployeeNotificationId { get; set; } // Ответственный руководитель (владелец процесса)
 
@@ -68,7 +68,7 @@ namespace NotifyNet.Core.Models
 		public DateTime? DateOfExecution { get; set; }
 
 		/* Блок "Исполнение" */
-		public string DescriptionOfWork { get; set; }
+		public string? DescriptionOfWork { get; set; }
 
 		public DateTime? DateWorkStatus { get; set; }
 
