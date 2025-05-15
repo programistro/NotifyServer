@@ -118,7 +118,7 @@ public class ForegroundServiceDemo : global::Android.App.Service
             // _notificationManagerService.SendNotification("adwad", "dawdwad");
 
             // await _hubConnection.InvokeAsync("Send", "connect");
-
+            
             if (intent.Action.Equals(Constants.ACTION_START_SERVICE))
             {
                 if (IsStarted)
@@ -149,36 +149,47 @@ public class ForegroundServiceDemo : global::Android.App.Service
 
     private async void OrderCreated(Order order)
     {
-        if (_employee == null)
+        try
         {
-            _token = await SecureStorage.Default.GetAsync("jwt_token");
-
-            if (_token != null)
+            _notificationManagerService.SendNotification("Notify", "ордер создан", link: "https://re.souso.ru/notifications");
+            if (_employee == null)
             {
-                var handler = new JwtSecurityTokenHandler();
-                var jwtToken = handler.ReadJwtToken(_token);
+                _token = await SecureStorage.Default.GetAsync("jwt_token");
 
-                _email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
-                _employee = await _userService.GetByEmailAsync(_email);
+                if (_token != null)
+                {
+                    var handler = new JwtSecurityTokenHandler();
+                    var jwtToken = handler.ReadJwtToken(_token);
+
+                    _email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+                    _employee = await _userService.GetByEmailAsync(_email);
                 
-                _employee.OrdersChanged += _mainPage.UserOnOrdersChanged;
+                    _employee.OrdersChanged += _mainPage.UserOnOrdersChanged;
+                }
+            }
+            else
+            {
+                order.Created = DateTime.SpecifyKind(order.Created.Value, DateTimeKind.Utc);
+                _employee?.Orders.Add(order);
+                try
+                {
+                    await _userService.Update(_employee);
+                }
+                catch (System.Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    throw;
+                }
+                _logger.LogInformation("Order created");
+
+                _notificationManagerService.SendNotification("Notify", "ордер создан", link: "https://re.souso.ru/notifications");
             }
         }
-        else
+        catch (System.Exception e)
         {
-            _employee?.Orders.Add(order);
-            try
-            {
-                await _userService.Update(_employee);
-            }
-            catch (System.Exception e)
-            {
-                Console.WriteLine(e.Message);
-                throw;
-            }
-            _logger.LogInformation("Order created");
-
-            _notificationManagerService.SendNotification("Notify", "ордер создан", link: "https://re.souso.ru/notifications");
+            Console.WriteLine(e);
+            _logger.LogError(e.Message);
+            throw;
         }
     }
 

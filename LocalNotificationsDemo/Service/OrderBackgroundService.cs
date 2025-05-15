@@ -44,7 +44,7 @@ public class OrderBackgroundService : BackgroundService
     {
         // Инициализация подключения к SignalR хабу
         _hubConnection = new HubConnectionBuilder()
-            .WithUrl("https://api.re.souso.ru/orderHub") // Замените на реальный URL вашего API
+            .WithUrl("http://0.0.0.0:8080") // Замените на реальный URL вашего API
             .WithAutomaticReconnect() // Автоматическое переподключение при разрыве
             .Build();
 
@@ -52,8 +52,6 @@ public class OrderBackgroundService : BackgroundService
         _hubConnection.On<OrderDto>("OrderCreated", OrderCreated);
         _hubConnection.On<Order>("OrderUpdated", OrderUpdated);
         _hubConnection.On<Guid>("OrderDeleted", OrderDeleted);
-
-        OrderCreated(new OrderDto());
 
         // Обработка ошибок подключения
         _hubConnection.Closed += async (error) =>

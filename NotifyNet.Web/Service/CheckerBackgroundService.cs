@@ -12,9 +12,10 @@ public sealed class CheckerBackgroundService : BackgroundService
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly IHubContext<OrderHub> _orderHub;
 
-    public CheckerBackgroundService(IServiceScopeFactory scopeFactory)
+    public CheckerBackgroundService(IServiceScopeFactory scopeFactory, IHubContext<OrderHub> orderHub)
     {
         // _orderService = orderService;
+        _orderHub = orderHub;
         _scopeFactory = scopeFactory;
     }
 
@@ -32,21 +33,20 @@ public sealed class CheckerBackgroundService : BackgroundService
                     {
                         var list = await _orderService.GetAllAsync();
 
-                        foreach (var item in list)
-                        {
-                            Orders.Add(item);
-                        }
+                        Orders = list.ToList();
                     }
 
                     var newList = await _orderService.GetAllAsync();
+                    newList.ToList();
 
-                    var onlyInFirst = Orders.Except(newList).ToList();
+                    var onlyInFirst = newList.Except(Orders).ToList();
 
-                    if (onlyInFirst.Count > 0)
+                    if (onlyInFirst.Count < newList.Count())
                     {
                         foreach (var item in onlyInFirst)
                         {
                             Orders.Add(item);
+                            
                             await _orderHub.Clients.All.SendAsync("OrderCreated", item);
                         }
                     }
@@ -57,7 +57,7 @@ public sealed class CheckerBackgroundService : BackgroundService
                 Console.WriteLine(e);
             }
 
-            await Task.Delay(30000, stoppingToken);
+            await Task.Delay(15000, stoppingToken);
         }
     }
 }

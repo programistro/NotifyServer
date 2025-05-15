@@ -84,5 +84,14 @@ namespace NotifyNet.Core.Models
 		//
 		// /* Чат */
 		// public virtual List<OrderChat> OrderChats { get; set; } = new List<OrderChat>();
+		
+		public bool Equals(Order other)
+		{
+			if (other == null) return false;
+			return Id == other.Id;
+		}
+		
+		public override bool Equals(object obj) => Equals(obj as Order);
+		public override int GetHashCode() => Id.GetHashCode();
 	}
 }
