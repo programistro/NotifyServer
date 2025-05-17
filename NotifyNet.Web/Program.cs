@@ -10,6 +10,7 @@ using NotifyNet.Infrastructure.Data;
 using NotifyNet.Infrastructure.Repository;
 using NotifyNet.Web;
 using NotifyNet.Web.Hubs;
+using NotifyNet.Web.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddSingleton<ConnectionManager>();
 builder.Services.AddDbContextFactory<AppDbConetxt>();
 builder.Services.Configure<IdentityOptions>(options =>
 {

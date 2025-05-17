@@ -11,10 +11,15 @@ public class CheckerBackgroundService : BackgroundService
     private List<Order> Orders { get; set; } = new();
     private readonly IOrderService _orderService;
     private readonly IHubContext<OrderHub> _orderHub;
+    private readonly ConnectionManager _connectionManager;
+    private readonly ILogger<CheckerBackgroundService> _logger;
 
-    public CheckerBackgroundService(IOrderService orderService)
+    public CheckerBackgroundService(IOrderService orderService, ILogger<CheckerBackgroundService> logger, 
+        ConnectionManager connectionManager)
     {
         _orderService = orderService;
+        _logger = logger;
+        _connectionManager = connectionManager;
     }
     
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -40,7 +45,17 @@ public class CheckerBackgroundService : BackgroundService
                 foreach (var item in onlyInFirst)
                 {
                     Orders.Add(item);
+                    
                     await _orderHub.Clients.All.SendAsync("OrderCreated", item);
+                }
+
+                foreach (var item in _connectionManager.Users)
+                {
+                    _logger.LogInformation($"user: {item}");
+                }
+                foreach (var item in _connectionManager.Users)
+                {
+                    _logger.LogInformation($"user connect id: {item}");
                 }
             }
         }
@@ -48,7 +63,6 @@ public class CheckerBackgroundService : BackgroundService
         {
             Console.WriteLine(e);
         }
-        
         await Task.Delay(30000, stoppingToken);
     }
 }
