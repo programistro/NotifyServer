@@ -169,7 +169,9 @@ public class ForegroundServiceDemo : global::Android.App.Service
             }
             else
             {
-                order.Created = DateTime.SpecifyKind(order.Created.Value, DateTimeKind.Utc);
+                if (order.Created.HasValue)
+                    order.Created = order.Created.Value.ToUniversalTime();
+
                 _employee?.Orders.Add(order);
                 try
                 {

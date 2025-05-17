@@ -43,6 +43,11 @@ public class UserRepository : IUserRepository
 
     public async Task Update(Employee user)
     {
+        if (user.Orders != null)
+        {
+            user.Orders.NormalizeDatesToUtc();
+        }
+        
         _context._Employees.Attach(user);
         _context.Entry(user).State = EntityState.Modified;
         await _context.SaveChangesAsync();
@@ -63,5 +68,50 @@ public class UserRepository : IUserRepository
     public async Task<IEnumerable<Employee>> GetAllAsync()
     {
         return await _context._Employees.ToListAsync();
+    }
+}
+
+public static class DateTimeExtensions
+{
+    public static void NormalizeAllDatesToUtc<T>(this IEnumerable<T> entities)
+    {
+        if (entities == null) return;
+
+        foreach (var entity in entities)
+        {
+            NormalizeDatesToUtc(entity);
+        }
+    }
+    
+    public static void NormalizeDatesToUtc<T>(this T entity)
+    {
+        if (entity == null) return;
+
+        var properties = typeof(T).GetProperties()
+            .Where(p => p.PropertyType == typeof(DateTime?) || p.PropertyType == typeof(DateTime));
+
+        foreach (var prop in properties)
+        {
+            var value = prop.GetValue(entity);
+
+            if (value == null)
+                continue;
+
+            if (prop.PropertyType == typeof(DateTime?))
+            {
+                var dt = (DateTime?)value;
+                if (dt.HasValue)
+                {
+                    var utcDate = DateTime.SpecifyKind(dt.Value, DateTimeKind.Utc);
+                    prop.SetValue(entity, utcDate);
+                }
+            }
+            else if (prop.PropertyType == typeof(DateTime))
+            {
+                var dt = (DateTime)value;
+                var utcDate = DateTime.SpecifyKind(dt, DateTimeKind.Utc);
+                prop.SetValue(entity, utcDate);
+            }
+        }
     }
 }

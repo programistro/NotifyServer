@@ -1,12 +1,16 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using NotifyNet.Application.Interface;
 using NotifyNet.Application.Service;
 using NotifyNet.Core.Interface;
 using NotifyNet.Core.Models;
 using NotifyNet.Infrastructure.Data;
 using NotifyNet.Infrastructure.Repository;
+using NotifyNet.Web;
 using NotifyNet.Web.Hubs;
 using NotifyNet.Web.Service;
 
@@ -44,10 +48,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(options =>
     {
         options.Cookie.HttpOnly = true;
-        options.ExpireTimeSpan = TimeSpan.FromDays(90); // ����������� ���� ����� ����
+        options.ExpireTimeSpan = TimeSpan.FromDays(90);
         options.LoginPath = "/login";
         options.AccessDeniedPath = "/Account/AccessDenied";
-        options.SlidingExpiration = true; // ����� ��� ���������� ����� �������� ���� ��� ���������� ������������
+        options.SlidingExpiration = true; 
     });
 
 builder.Services.AddAuthorization();

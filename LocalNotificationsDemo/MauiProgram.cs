@@ -26,6 +26,7 @@ namespace LocalNotificationsDemo
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             builder.Services.AddDbContextFactory<AppDbConetxt>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
