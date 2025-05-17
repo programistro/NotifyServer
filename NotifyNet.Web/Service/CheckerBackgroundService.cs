@@ -48,20 +48,20 @@ public class CheckerBackgroundService : BackgroundService
 
                     await _orderHub.Clients.All.SendAsync("OrderCreated", item);
                 }
-
-                foreach (var item in _connectionManager.Users)
-                {
-                    _logger.LogInformation($"user: {item}");
-                }
-                foreach (var item in _connectionManager.Users)
-                {
-                    _logger.LogInformation($"user connect id: {item}");
-                }
             }
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
+        }
+        
+        foreach (var item in _connectionManager.Users)
+        {
+            _logger.LogInformation($"user: {item}");
+        }
+        foreach (var item in _connectionManager.Users)
+        {
+            _logger.LogInformation($"user connect id: {item}");
         }
 
         await Task.Delay(30000, stoppingToken);
