@@ -24,6 +24,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddSingleton<CheckerBackgroundService>();
+builder.Services.AddSingleton<ConnectionManager>();
 builder.Services.AddHostedService(provider => provider.GetRequiredService<CheckerBackgroundService>());
 builder.Services.AddDbContext<AppDbConetxt>();
 
