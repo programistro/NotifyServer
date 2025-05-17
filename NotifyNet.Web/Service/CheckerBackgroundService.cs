@@ -43,10 +43,11 @@ public class CheckerBackgroundService : BackgroundService
                     }
 
                     var newList = await _orderService.GetAllAsync();
+                    newList.ToList();
 
-                    var onlyInFirst = Orders.Except(newList).ToList();
+                    var onlyInFirst = newList.Except(Orders).ToList();
 
-                    if (onlyInFirst.Count > 0)
+                    if (onlyInFirst.Count < newList.Count())
                     {
                         foreach (var item in onlyInFirst)
                         {
