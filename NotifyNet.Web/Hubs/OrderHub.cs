@@ -2,14 +2,22 @@
 using Microsoft.AspNetCore.SignalR;
 using NotifyNet.Core.Dto;
 using NotifyNet.Core.Models;
+using NotifyNet.Web.Service;
 
 namespace NotifyNet.Web.Hubs;
 
-public class OrderHub(ILogger<OrderHub> _logger) : Hub
+public class OrderHub(ILogger<OrderHub> _logger, ConnectionManager _connectionManager) : Hub
 {
     public async Task Send(string message)
     {
         _logger.LogInformation(message);
+    }
+
+    public override Task OnConnectedAsync()
+    {
+        _connectionManager.ConnectionsId.Add(Context.ConnectionId);
+        _connectionManager.Users.Add(Context.User.Identity.Name);
+        return base.OnConnectedAsync();
     }
 
     public async Task NotifyOrderCreated(OrderDto order)
