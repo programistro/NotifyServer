@@ -15,11 +15,12 @@ public class CheckerBackgroundService : BackgroundService
     private readonly ConnectionManager _connectionManager;
 
     public CheckerBackgroundService(IServiceScopeFactory serviceScopeFactory, ILogger<CheckerBackgroundService> logger,
-        ConnectionManager connectionManager)
+        ConnectionManager connectionManager, IHubContext<OrderHub> orderHub)
     {
         _serviceScopeFactory = serviceScopeFactory;
         _logger = logger;
         _connectionManager = connectionManager;
+        _orderHub = orderHub;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -56,10 +57,17 @@ public class CheckerBackgroundService : BackgroundService
                             await _orderHub.Clients.All.SendAsync("OrderCreated", item);
                         }
                     }
+                    else
+                    {
+                        foreach (var item in onlyInFirst)
+                        {
+                            Orders.Remove(item);
+                        }
+                    }
                 }
             }
             catch (Exception e)
-            {
+            { 
                 Console.WriteLine(e);
             }
         
