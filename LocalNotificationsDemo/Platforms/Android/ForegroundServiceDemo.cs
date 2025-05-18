@@ -104,10 +104,17 @@ public class ForegroundServiceDemo : global::Android.App.Service
                 await _hubConnection.StartAsync();
             };
 
+            _hubConnection.Reconnected += async (error) =>
+            {
+                _logger.LogInformation("SignalR hub connection started again");
+                _notificationManagerService.SendNotification("Уведомление", "Соединение снова установленно");
+            };
+
             try
             {
                 await _hubConnection.StartAsync();
                 _logger.LogInformation("SignalR hub connection started");
+                _notificationManagerService.SendNotification("Уведомление", "Соединение установленно");
             }
             catch (System.Exception ex)
             {
@@ -183,7 +190,7 @@ public class ForegroundServiceDemo : global::Android.App.Service
                 }
                 _logger.LogInformation("Order created");
 
-                _notificationManagerService.SendNotification("Notify", "ордер создан", link: "https://re.souso.ru/notifications");
+                _notificationManagerService.SendNotification("Уведомление", $"ордер создан {order.Name}", link: "https://re.souso.ru/notifications");
             }
         }
         catch (System.Exception e)
