@@ -57,7 +57,7 @@ public class CheckerBackgroundService : BackgroundService
                             await _orderHub.Clients.All.SendAsync("OrderCreated", item);
                         }
                     }
-                    else
+                    else if(onlyInFirst.Count > newList.Count())
                     {
                         foreach (var item in onlyInFirst)
                         {

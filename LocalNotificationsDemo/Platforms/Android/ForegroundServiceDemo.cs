@@ -151,7 +151,6 @@ public class ForegroundServiceDemo : global::Android.App.Service
     {
         try
         {
-            _notificationManagerService.SendNotification("Notify", "ордер создан", link: "https://re.souso.ru/notifications");
             if (_employee == null)
             {
                 _token = await SecureStorage.Default.GetAsync("jwt_token");
