@@ -79,6 +79,7 @@ public class CheckerBackgroundService : BackgroundService
             {
                 _logger.LogInformation($"user connect id: {item}");
             }
+            _logger.LogInformation($"orders count {Orders.Count}");
 
             await Task.Delay(30000, stoppingToken);
         }
