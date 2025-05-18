@@ -151,11 +151,18 @@ public class NotificationManagerService : INotificationManagerService
         }
     }
 
+    // long GetNotifyTime(DateTime notifyTime)
+    // {
+    //     DateTime utcTime = TimeZoneInfo.ConvertTimeToUtc(notifyTime);
+    //     double epochDiff = (new DateTime(1970, 1, 1) - DateTime.MinValue).TotalSeconds;
+    //     long utcAlarmTime = utcTime.AddSeconds(-epochDiff).Ticks / 10000;
+    //     return utcAlarmTime; // milliseconds
+    // }
+    
     long GetNotifyTime(DateTime notifyTime)
     {
-        DateTime utcTime = TimeZoneInfo.ConvertTimeToUtc(notifyTime);
-        double epochDiff = (new DateTime(1970, 1, 1) - DateTime.MinValue).TotalSeconds;
-        long utcAlarmTime = utcTime.AddSeconds(-epochDiff).Ticks / 10000;
-        return utcAlarmTime; // milliseconds
+        var utcTime = notifyTime.ToUniversalTime();
+        var epoch = new DateTime(1970, 1, 1);
+        return (long)(utcTime - epoch).TotalMilliseconds;
     }
 }

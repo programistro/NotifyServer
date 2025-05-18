@@ -47,6 +47,7 @@ public class CheckerBackgroundService : BackgroundService
                     newList.ToList();
 
                     var onlyInFirst = newList.Except(Orders).ToList();
+                    var onlyInSecond = Orders.Except(newList).ToList();
 
                     if (onlyInFirst.Count < newList.Count())
                     {
@@ -57,9 +58,9 @@ public class CheckerBackgroundService : BackgroundService
                             await _orderHub.Clients.All.SendAsync("OrderCreated", item);
                         }
                     }
-                    else if(onlyInFirst.Count > newList.Count())
+                    if(onlyInSecond.Count < newList.Count())
                     {
-                        foreach (var item in onlyInFirst)
+                        foreach (var item in onlyInSecond)
                         {
                             Orders.Remove(item);
                         }
@@ -81,7 +82,7 @@ public class CheckerBackgroundService : BackgroundService
             }
             _logger.LogInformation($"orders count {Orders.Count}");
 
-            await Task.Delay(30000, stoppingToken);
+            await Task.Delay(10000, stoppingToken);
         }
     }
 }
