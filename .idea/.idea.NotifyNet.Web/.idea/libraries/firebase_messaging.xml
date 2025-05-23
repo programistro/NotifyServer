@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="firebase-messaging">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../../../Temp/JetBrains/xamarinAarPackages/firebase-messaging/classes.jar" />
+      <root url="file://$PROJECT_DIR$/../../../../../Temp/JetBrains/xamarinAarPackages/firebase-messaging/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

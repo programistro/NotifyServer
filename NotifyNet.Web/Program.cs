@@ -23,6 +23,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddHttpClient();
 builder.Services.AddSingleton<CheckerBackgroundService>();
 builder.Services.AddSingleton<ConnectionManager>();
 builder.Services.AddHostedService(provider => provider.GetRequiredService<CheckerBackgroundService>());
@@ -33,7 +34,6 @@ builder.Services.AddIdentity<Employee, Permission>(options =>
     options.Password.RequireDigit = false;
     options.Password.RequireLowercase = false;
     options.Password.RequireNonAlphanumeric = false;
-    // options.Password.RequireNonLetterOrDigit = false;
     options.Password.RequireUppercase = false;
     options.Password.RequiredLength = 6;
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";

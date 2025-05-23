@@ -1,0 +1,106 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net9.0;net9.0-android;net9.0-ios;</TargetFrameworks>
+		<OutputType>Library</OutputType>
+		<UseMaui>true</UseMaui>
+<!--		<MauiVersion Condition="$(TargetFramework.Contains('net9.0'))">8.0.3</MauiVersion>-->
+<!--		<MauiVersion Condition="$(TargetFramework.Contains('net9.0'))">7.0.49</MauiVersion>-->
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<IsPackable>true</IsPackable>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+
+<!--		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">12.0</SupportedOSPlatformVersion>-->
+<!--		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>-->
+
+		<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>true</AppendRuntimeIdentifierToOutputPath>
+
+		<Configurations>Debug;Release</Configurations>
+		<Platforms>AnyCPU;Simulator;Device</Platforms>
+	</PropertyGroup>
+
+	<!--NuGet package--> 
+	<PropertyGroup>
+		<Product>Plugin.FirebasePushNotifications</Product>
+		<Description>Receive and handle firebase push notifications in .NET MAUI apps</Description>
+		<Version>1.0.0</Version>
+		<Authors>Thomas Galliker</Authors>
+		<PackageId>Plugin.FirebasePushNotifications</PackageId>
+		<PackageTags>firebase;push;notification;notifications</PackageTags>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageProjectUrl>https://github.com/thomasgalliker/Plugin.FirebasePushNotifications</PackageProjectUrl>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/thomasgalliker/Plugin.FirebasePushNotifications</RepositoryUrl>
+		<Company>superdev GmbH</Company>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<PackageReleaseNotes>3.1
+- Extend INotificationChannels to manage notification channel groups.
+- Internal refactoring of INotificationChannels implementation.
+- Removed properties IsActive and IsDefault from NotificationChannelRequest. Set the default notification channel via UseFirebasePushNotifications(o => o.Android.DefaultNotificationChannelId = ...).
+- Configure initial list of notification channels via o.Android.NotificationChannels and notification groups via o.Android.NotificationChannelGroups.
+
+3.0
+- Update firebase-ios-sdk by replacing nuget package Xamarin.Firebase.iOS.CloudMessaging with AdamE.Firebase.iOS.CloudMessaging.
+
+2.5
+- Move static properties from Android's FirebasePushNotificationManager to FirebasePushNotificationAndroidOptions.
+- iOS 18 workaround for duplicate notifications in foreground mode.
+- iOS options to override default UNNotificationPresentationOptions for notifications received in foreground mode.
+- Handle gcm.notification.click_action payload as click_action in Android.
+      
+2.4
+- Refactor instanciation of IFirebasePushNotification.
+- Refactor startup procedure of platform-specific services.
+- Add singleton instance INotificationPermissions.Current.
+
+2.3
+- General bug fixes and code cleanup.
+- Bug fixes in the area of topic subscriptions.
+- IFirebasePushNotification.Current.
+- Add singleton instance IFirebasePushNotification.Current and INotificationPermissions.Current.
+
+2.2
+- Complete refactoring of the original 1.x implementation.
+- Simplified APIs, less static code, support for dependency injection.
+
+1.0
+- Initial release.
+		</PackageReleaseNotes>
+		<Copyright>Copyright $([System.DateTime]::Now.ToString(`yyyy`)) © Thomas Galliker</Copyright>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="True" PackagePath="\" />
+    <None Include="..\LICENSE" Pack="True" PackagePath="\" />
+    <None Include="..\Images\logo.png" Pack="True" PackagePath="\" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="[13.0.3,)" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.5" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+	</ItemGroup>
+
+  <!--Platform-specific package references-->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
+    <PackageReference Include="AdamE.Firebase.iOS.CloudMessaging" Version="11.10.0" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
+    <PackageReference Include="Xamarin.AndroidX.Activity" Version="1.10.1.1" />
+    <PackageReference Include="Xamarin.AndroidX.Activity.Ktx" Version="1.10.1.1" />
+    <PackageReference Include="Xamarin.Firebase.Common" Version="121.0.0.5" />
+    <PackageReference Include="Xamarin.Firebase.Messaging" Version="124.1.1.1" />
+    <PackageReference Include="Xamarin.GooglePlayServices.Tasks" Version="118.3.0.1" />
+  </ItemGroup>
+</Project>

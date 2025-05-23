@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "324734719712",
+    "project_id": "metal-ranger-379519",
+    "storage_bucket": "metal-ranger-379519.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324734719712:android:c01340beaa6eb884e56285",
+        "android_client_info": {
+          "package_name": "com.companyname.localnotificationsdemo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDO8FE2cgl3XQNnIPUjuPUxhJW-HEKxp8Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using System.Text;
+using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 using NotifyNet.Application.Interface;
 using NotifyNet.Core.Models;
 using NotifyNet.Infrastructure.Data;
 using NotifyNet.Web.Hubs;
+using NotifyNet.Web.Models;
 
 namespace NotifyNet.Web.Service;
 
@@ -13,6 +16,7 @@ public class CheckerBackgroundService : BackgroundService
     private readonly IHubContext<OrderHub> _orderHub;
     private readonly ILogger<CheckerBackgroundService> _logger;
     private readonly ConnectionManager _connectionManager;
+    private readonly HttpClient _httpClient;
 
     public CheckerBackgroundService(IServiceScopeFactory serviceScopeFactory, ILogger<CheckerBackgroundService> logger,
         ConnectionManager connectionManager, IHubContext<OrderHub> orderHub)

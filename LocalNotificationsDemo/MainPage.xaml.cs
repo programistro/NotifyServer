@@ -20,6 +20,7 @@ using Microsoft.Net.Http.Headers;
 using NotifyNet.Application.Interface;
 using NotifyNet.Core.Models;
 using NotifyNet.Infrastructure.Data;
+using Plugin.FirebasePushNotifications;
 #if ANDROID
 using LocalNotificationsDemo.Platforms.Android;
 #endif
@@ -95,6 +96,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         
         _httpClient = IPlatformApplication.Current.Services.GetService<HttpClient>();
         notificationManager = IPlatformApplication.Current.Services.GetRequiredService<INotificationManagerService>();
+        _logger = IPlatformApplication.Current.Services.GetService<ILogger<MainPage>>();
         _userService = IPlatformApplication.Current.Services.GetRequiredService<IUserService>();
         notificationManager.NotificationReceived += (sender, eventArgs) =>
         {
@@ -104,28 +106,23 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     }
 
 #if ANDROID
-   protected override async void OnAppearing()
+    protected override async void OnAppearing()
     {
-        // base.OnAppearing();
-        
         PermissionStatus status = await Permissions.RequestAsync<NotificationPermission>();
-        
+
         if (string.IsNullOrEmpty(_token))
         {
             _token = await SecureStorage.Default.GetAsync("jwt_token");
-            //
+
             if (_token == null)
             {
                 return;
             }
-            //   
+
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(_token);
 
-            
             Email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
-
-            // _user = _conetxt.Employees.FirstOrDefault(u => u.Email == Email);
 
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -150,29 +147,18 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
 
     private async void MainPage_OnLoaded(object? sender, EventArgs e)
     {
-        // if (string.IsNullOrEmpty(_token))
-        // {
-        //     _token = await SecureStorage.Default.GetAsync("jwt_token");
-        //
-        //     if (_token == null)
-        //     {
-        //         return;
-        //     }
-        //     
-        //     var handler = new JwtSecurityTokenHandler();
-        //     var jwtToken = handler.ReadJwtToken(_token);
-        //
-        //     Email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
-        //
-        //     _user = await _userService.GetByEmailAsync(Email);
-        //     
-        //     _user.OrdersChanged += UserOnOrdersChanged;
-        //     Orders = new ObservableCollection<Order>(_user.Orders);
-        //     
-        //     OnPropertyChanged(nameof(Orders));
-        //     
-        //     IsAuthenticated = true;
-        // }
+        INotificationPermissions notificationPermissions = INotificationPermissions.Current;
+        var permissionStatus = await notificationPermissions.RequestPermissionAsync();
+
+        IFirebasePushNotification.Current.TokenRefreshed += this.OnTokenRefresh;
+        IFirebasePushNotification.Current.NotificationOpened += this.OnNotificationOpened;
+        IFirebasePushNotification.Current.NotificationReceived += this.OnNotificationReceived;
+        IFirebasePushNotification.Current.NotificationDeleted += this.OnNotificationDeleted;
+        IFirebasePushNotification.Current.NotificationAction += this.OnNotificationAction;
+        IFirebasePushNotification.Current.SubscribeTopic("order_created");
+        IFirebasePushNotification.Current.RegisterForPushNotificationsAsync();
+        
+        _logger.LogInformation("Registering notification categories");
     }
 
     public void UserOnOrdersChanged(ObservableCollection<Order> sender)
@@ -204,5 +190,36 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     {
         Routing.RegisterRoute("LoginPage", typeof(LoginPage));
         await Shell.Current.GoToAsync("LoginPage");
+    }
+    
+    private void OnNotificationAction(object? sender, FirebasePushNotificationActionEventArgs e)
+    {
+        _logger.LogInformation($"NotificationAction: {e.Action}");
+
+        OpenUrl("https://re.souso.ru/");
+    }
+
+    private void OnNotificationDeleted(object? sender, FirebasePushNotificationDataEventArgs e)
+    {
+        _logger.LogInformation($"NotificationDeleted: {e.Data}");
+    }
+
+    private void OnNotificationReceived(object? sender, FirebasePushNotificationDataEventArgs e)
+    {
+        _logger.LogInformation($"NotificationReceived: {e.Data}");
+        
+        notificationManager.SendNotification("title", e.ToString());
+    }
+
+    private void OnNotificationOpened(object? sender, FirebasePushNotificationResponseEventArgs e)
+    {
+        _logger.LogInformation($"NotificationOpened: {e.Data}");
+
+        OpenUrl("https://re.souso.ru/");
+    }
+
+    private void OnTokenRefresh(object? sender, FirebasePushNotificationTokenEventArgs e)
+    {
+        _logger.LogInformation($"TokenRefresh: {e.Token}");
     }
 }
