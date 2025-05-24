@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Net.Http.Headers;
+using System.Text;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using NotifyNet.Application.Interface;
@@ -59,7 +61,32 @@ public class CheckerBackgroundService : BackgroundService
                         {
                             Orders.Add(item);
 
-                            await _orderHub.Clients.All.SendAsync("OrderCreated", item);
+                            // await _orderHub.Clients.All.SendAsync("OrderCreated", item);
+                            var token = "206364511873-gh73elvv6qj7g49dugsf543gd1p5d56r.apps.googleusercontent.com";
+        
+                            var credential = GoogleCredential.FromFile(@"LocalNotificationsDemo/Platforms/Android/Resources/metal-ranger-379519-firebase-adminsdk-pufly-b376aa5169.json")
+                                .CreateScoped("https://www.googleapis.com/auth/firebase.messaging");
+
+                            var accessToken = await credential.UnderlyingCredential.GetAccessTokenForRequestAsync();
+                            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        
+                            var payload = new
+                            {
+                                message = new
+                                {
+                                    topic = "order_created",
+                                    data = new Dictionary<string, string>
+                                    {
+                                        { "order", JsonConvert.SerializeObject(item) }
+                                    }
+                                }
+                            };
+
+                            var json = JsonConvert.SerializeObject(payload);
+                            var content = new StringContent(json, Encoding.UTF8, "application/json");
+                            var responseMessage = await _httpClient.PostAsync($"https://fcm.googleapis.com/v1/projects/metal-ranger-379519/messages:send", content);
+        
+                            var contentString = await responseMessage.Content.ReadAsStringAsync();
                         }
                     }
                     if(onlyInSecond.Count < newList.Count())
