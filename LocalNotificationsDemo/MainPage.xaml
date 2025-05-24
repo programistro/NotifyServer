@@ -33,13 +33,10 @@
                         </Label>
                 </Grid>
         </Shell.TitleView>
-        
-        <VerticalStackLayout x:Name="verticalStackLayout"
+
+    <VerticalStackLayout x:Name="verticalStackLayout"
                              Spacing="6">
-                
-                <!-- <Button Text="Войти" Clicked="Button_OnClicked" HorizontalOptions="Center" -->
-                <!--         IsVisible="{Binding IsAuthenticated}"/> -->
-        
+
         <ListView x:Name="OrderList" IsVisible="{Binding !IsAuthenticated}" ItemsSource="{Binding Orders}">
                 <ListView.ItemTemplate>
                         <DataTemplate>

@@ -4,6 +4,7 @@ using Android.Graphics;
 using Android.Net;
 using Android.OS;
 using AndroidX.Core.App;
+using Microsoft.Extensions.Logging;
 using Microsoft.Maui.ApplicationModel;
 using Uri = Android.Net.Uri;
 
@@ -27,6 +28,8 @@ public class NotificationManagerService : INotificationManagerService
     public event EventHandler NotificationReceived;
 
     public static NotificationManagerService Instance { get; private set; }
+    
+    private readonly ILogger<NotificationManagerService> _logger;
 
     public NotificationManagerService()
     {
@@ -34,12 +37,17 @@ public class NotificationManagerService : INotificationManagerService
         {
             CreateNotificationChannel();
             compatManager = NotificationManagerCompat.From(Platform.AppContext);
+            
             Instance = this;
+            
+            _logger = IPlatformApplication.Current.Services.GetService<ILogger<NotificationManagerService>>();
         }
     }
 
     public void SendNotification(string title, string message, DateTime? notifyTime = null, string link = null)
     {
+        _logger.LogInformation($"Sending notification: {title} - {message}");
+        
         if (!channelInitialized)
         {
             CreateNotificationChannel();
@@ -84,6 +92,7 @@ public class NotificationManagerService : INotificationManagerService
         }
         else
         {
+            _logger.LogDebug($"Sending notification: {title} - {message}");
             Show(title, message);
         }
     }

@@ -17,6 +17,7 @@ using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
 using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 using NotifyNet.Application.Interface;
 using NotifyNet.Core.Models;
 using NotifyNet.Infrastructure.Data;
@@ -58,6 +59,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         set
         {
             _orders = value;
+            OnPropertyChanged(nameof(Orders));
         }
     }
     
@@ -98,11 +100,18 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         notificationManager = IPlatformApplication.Current.Services.GetRequiredService<INotificationManagerService>();
         _logger = IPlatformApplication.Current.Services.GetService<ILogger<MainPage>>();
         _userService = IPlatformApplication.Current.Services.GetRequiredService<IUserService>();
-        notificationManager.NotificationReceived += (sender, eventArgs) =>
-        {
-            var eventData = (NotificationEventArgs)eventArgs;
-            ShowNotification(eventData.Title, eventData.Message);
-        };
+        // notificationManager.NotificationReceived += (sender, eventArgs) =>
+        // {
+        //     var eventData = (NotificationEventArgs)eventArgs;
+        //     ShowNotification(eventData.Title, eventData.Message);
+        // };
+        notificationManager.NotificationReceived += NotificationManagerOnNotificationReceived;
+    }
+
+    private void NotificationManagerOnNotificationReceived(object? sender, EventArgs e)
+    {
+        var eventData = (NotificationEventArgs)e;
+        ShowNotification(eventData.Title, eventData.Message);
     }
 
 #if ANDROID
@@ -178,11 +187,11 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            var msg = new Label()
-            {
-                Text = $"Notification Received:\nTitle: {title}\nMessage: {message}"
-            };
-            verticalStackLayout.Children.Add(msg);
+            //var msg = new Label()
+            //{
+            //    Text = $"Notification Received:\nTitle: {title}\nMessage: {message}"
+            //};
+            //verticalStackLayout.Children.Add(msg);
         });
     }
 
@@ -204,11 +213,28 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         _logger.LogInformation($"NotificationDeleted: {e.Data}");
     }
 
-    private void OnNotificationReceived(object? sender, FirebasePushNotificationDataEventArgs e)
+    private async void OnNotificationReceived(object? sender, FirebasePushNotificationDataEventArgs e)
     {
         _logger.LogInformation($"NotificationReceived: {e.Data}");
+
+        var order = JsonConvert.DeserializeObject<Order>(e.Data["order"].ToString());
         
-        notificationManager.SendNotification("title", e.ToString());
+        if (_user != null)
+        {
+            _user?.Orders.Add(order);
+            Orders.Add(order);
+            try
+            {
+                await _userService.Update(_user);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+        
+        notificationManager.SendNotification("Уведомление", $"Созданно задание {order.Name}");
     }
 
     private void OnNotificationOpened(object? sender, FirebasePushNotificationResponseEventArgs e)

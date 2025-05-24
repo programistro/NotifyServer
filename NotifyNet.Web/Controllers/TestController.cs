@@ -3,6 +3,7 @@ using System.Text;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using NotifyNet.Core.Models;
 using NotifyNet.Web.Models;
 
 namespace NotifyNet.Web.Controllers;
@@ -20,7 +21,7 @@ public class TestController : ControllerBase
 
     [HttpPost]
     [Route("Post")]
-    public async Task<ActionResult> PostAsync(NotifyModel model)
+    public async Task<ActionResult> PostAsync(Order model)
     {
         //206364511873-gh73elvv6qj7g49dugsf543gd1p5d56r.apps.googleusercontent.com
         var token = "206364511873-gh73elvv6qj7g49dugsf543gd1p5d56r.apps.googleusercontent.com";
@@ -31,24 +32,6 @@ public class TestController : ControllerBase
         var accessToken = await credential.UnderlyingCredential.GetAccessTokenForRequestAsync();
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         
-        var json = """
-                   {
-                       "message": {
-                           "topic": "weather_updates",
-                           "notification": {
-                               "title": "Weather Update",
-                               "body": "Pleasant with clouds and sun"
-                           },
-                           "data": {
-                               "sunrise": "1684926645",
-                               "sunset": "1684977332",
-                               "temp": "292.55",
-                               "feels_like": "292.87"
-                           }
-                       }
-                   }
-                   """;
-        
         var json2 = """
                     {
                         "message": {
@@ -58,16 +41,26 @@ public class TestController : ControllerBase
                                 "body": "Pleasant with clouds and sun"
                             },
                             "data": {
-                                "sunrise": "1684926645",
-                                "sunset": "1684977332",
-                                "temp": "292.55",
-                                "feels_like": "292.87"
+                                "line": "string 111",
                             }
                         }
                     }
                     """;
         
-        var content = new StringContent(json2, Encoding.UTF8, "application/json");
+        var payload = new
+        {
+            message = new
+            {
+                topic = "order_created",
+                data = new Dictionary<string, string>
+                {
+                    { "order", JsonConvert.SerializeObject(model) }
+                }
+            }
+        };
+
+        var json = JsonConvert.SerializeObject(payload);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
         var responseMessage = await _httpClient.PostAsync($"https://fcm.googleapis.com/v1/projects/metal-ranger-379519/messages:send", content);
         
         var contentString = await responseMessage.Content.ReadAsStringAsync();
