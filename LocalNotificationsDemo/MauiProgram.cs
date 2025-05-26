@@ -81,7 +81,7 @@ namespace LocalNotificationsDemo
 
 #if ANDROID
             builder.Services.AddSingleton<INotificationManagerService, LocalNotificationsDemo.Platforms.Android.NotificationManagerService>();
-            // builder.Services.AddSingleton<LocalNotificationsDemo.Platforms.Android.ForegroundServiceDemo>();
+            builder.Services.AddSingleton<LocalNotificationsDemo.Platforms.Android.ForegroundServiceDemo>();
 #elif IOS
             builder.Services
                 .AddSingleton<INotificationManagerService,

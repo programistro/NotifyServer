@@ -67,7 +67,6 @@ public class CheckerBackgroundService : BackgroundService
         
                             var credential = GoogleCredential.FromFile(@"C:\Users\katana\Downloads\NotifyServer\NotifyServer\LocalNotificationsDemo\Platforms\Android\Resources\metal-ranger-379519-firebase-adminsdk-pufly-b376aa5169.json")
                                 .CreateScoped("https://www.googleapis.com/auth/firebase.messaging");
-
                             
                             var accessToken = await credential.UnderlyingCredential.GetAccessTokenForRequestAsync();
 

@@ -74,83 +74,83 @@ public class ForegroundServiceDemo : global::Android.App.Service
 
     public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
     {
-        // Task.Run(async () =>
-        // {
-        //     _hubConnection = new HubConnectionBuilder()
-        //         .WithUrl("https://api.re.souso.ru/orderHub")
-        //         .WithAutomaticReconnect()
-        //         .Build();
-        //
-        //     _hubConnection.On<Order>("OrderCreated", OrderCreated);
-        //     _hubConnection.On<Order>("OrderUpdated", OrderUpdated);
-        //     _hubConnection.On<Guid>("OrderDeleted", OrderDeleted);
-        //     
-        //     _token = await SecureStorage.Default.GetAsync("jwt_token");
-        //
-        //     if (_token != null)
-        //     {
-        //         var handler = new JwtSecurityTokenHandler();
-        //         var jwtToken = handler.ReadJwtToken(_token);
-        //
-        //         _email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
-        //         _employee = await _userService.GetByEmailAsync(_email);
-        //
-        //         _employee.OrdersChanged += _mainPage.UserOnOrdersChanged;
-        //     }
-        //
-        //     _hubConnection.Closed += async (error) =>
-        //     {
-        //         await Task.Delay(new Random().Next(0, 5) * 1000);
-        //         await _hubConnection.StartAsync();
-        //     };
-        //
-        //     _hubConnection.Reconnected += async (error) =>
-        //     {
-        //         _logger.LogInformation("SignalR hub connection started again");
-        //         _notificationManagerService.SendNotification("Уведомление", "Соединение снова установленно");
-        //     };
-        //
-        //     try
-        //     {
-        //         await _hubConnection.StartAsync();
-        //         _logger.LogInformation("SignalR hub connection started");
-        //         _notificationManagerService.SendNotification("Уведомление", "Соединение установленно");
-        //     }
-        //     catch (System.Exception ex)
-        //     {
-        //         Console.WriteLine(ex.ToString());
-        //         throw new System.Exception(ex.Message);
-        //     }
-        //
-        //     // _notificationManagerService.SendNotification("adwad", "dawdwad");
-        //
-        //     // await _hubConnection.InvokeAsync("Send", "connect");
-        //     
-        //     if (intent.Action.Equals(Constants.ACTION_START_SERVICE))
-        //     {
-        //         if (IsStarted)
-        //         {
-        //             Log.Info("wdwa", "OnStartCommand: Restarting the timer.");
-        //             _notificationManagerService.SendNotification("adwad", "dawdwad");
-        //         }
-        //         else
-        //         {
-        //             Log.Info("wdwa", "OnStartCommand: Restarting the timer.");
-        //             IsStarted = true;
-        //         }
-        //     }
-        //     else if (intent.Action.Equals(Constants.ACTION_STOP_SERVICE))
-        //     {
-        //         Log.Info("wdwa", "OnStartCommand: Restarting the timer.");
-        //         StopForeground(StopForegroundFlags.Remove);
-        //         StopSelf();
-        //     }
-        //     else if (intent.Action.Equals(Constants.ACTION_RESTART_TIMER))
-        //     {
-        //         Log.Info("wdwa", "OnStartCommand: Restarting the timer.");
-        //     }
-        // });
-        //
+        Task.Run(async () =>
+        {
+            _hubConnection = new HubConnectionBuilder()
+                .WithUrl("https://api.re.souso.ru/orderHub")
+                .WithAutomaticReconnect()
+                .Build();
+        
+            _hubConnection.On<Order>("OrderCreated", OrderCreated);
+            _hubConnection.On<Order>("OrderUpdated", OrderUpdated);
+            _hubConnection.On<Guid>("OrderDeleted", OrderDeleted);
+            
+            // _token = await SecureStorage.Default.GetAsync("jwt_token");
+            //
+            // if (_token != null)
+            // {
+            //     var handler = new JwtSecurityTokenHandler();
+            //     var jwtToken = handler.ReadJwtToken(_token);
+            //
+            //     _email = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+            //     _employee = await _userService.GetByEmailAsync(_email);
+            //
+            //     _employee.OrdersChanged += _mainPage.UserOnOrdersChanged;
+            // }
+        
+            _hubConnection.Closed += async (error) =>
+            {
+                await Task.Delay(new Random().Next(0, 5) * 1000);
+                await _hubConnection.StartAsync();
+            };
+        
+            _hubConnection.Reconnected += async (error) =>
+            {
+                _logger.LogInformation("SignalR hub connection started again");
+                // _notificationManagerService.SendNotification("Уведомление", "Соединение снова установленно");
+            };
+        
+            try
+            {
+                await _hubConnection.StartAsync();
+                _logger.LogInformation("SignalR hub connection started");
+                // _notificationManagerService.SendNotification("Уведомление", "Соединение установленно");
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw new System.Exception(ex.Message);
+            }
+        
+            // _notificationManagerService.SendNotification("adwad", "dawdwad");
+        
+            // await _hubConnection.InvokeAsync("Send", "connect");
+            
+            if (intent.Action.Equals(Constants.ACTION_START_SERVICE))
+            {
+                if (IsStarted)
+                {
+                    Log.Info("wdwa", "OnStartCommand: Restarting the timer.");
+                    // _notificationManagerService.SendNotification("adwad", "dawdwad");
+                }
+                else
+                {
+                    Log.Info("wdwa", "OnStartCommand: Restarting the timer.");
+                    IsStarted = true;
+                }
+            }
+            else if (intent.Action.Equals(Constants.ACTION_STOP_SERVICE))
+            {
+                Log.Info("wdwa", "OnStartCommand: Restarting the timer.");
+                StopForeground(StopForegroundFlags.Remove);
+                StopSelf();
+            }
+            else if (intent.Action.Equals(Constants.ACTION_RESTART_TIMER))
+            {
+                Log.Info("wdwa", "OnStartCommand: Restarting the timer.");
+            }
+        });
+        
         return StartCommandResult.Sticky;
     }
 
