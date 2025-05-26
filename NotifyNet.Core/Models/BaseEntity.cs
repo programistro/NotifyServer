@@ -13,6 +13,6 @@ namespace NotifyNet.Core.Models
 
 		public DateTime? Updated { get; set; }
 
-		public string Description { get; set; }
+		public string? Description { get; set; }
 	}
 }
