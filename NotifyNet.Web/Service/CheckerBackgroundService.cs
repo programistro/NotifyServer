@@ -21,12 +21,13 @@ public class CheckerBackgroundService : BackgroundService
     private readonly HttpClient _httpClient;
 
     public CheckerBackgroundService(IServiceScopeFactory serviceScopeFactory, ILogger<CheckerBackgroundService> logger,
-        ConnectionManager connectionManager, IHubContext<OrderHub> orderHub)
+        ConnectionManager connectionManager, IHubContext<OrderHub> orderHub, HttpClient httpClient)
     {
         _serviceScopeFactory = serviceScopeFactory;
         _logger = logger;
         _connectionManager = connectionManager;
         _orderHub = orderHub;
+        _httpClient = httpClient;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -64,29 +65,41 @@ public class CheckerBackgroundService : BackgroundService
                             // await _orderHub.Clients.All.SendAsync("OrderCreated", item);
                             var token = "206364511873-gh73elvv6qj7g49dugsf543gd1p5d56r.apps.googleusercontent.com";
         
-                            var credential = GoogleCredential.FromFile(@"LocalNotificationsDemo/Platforms/Android/Resources/metal-ranger-379519-firebase-adminsdk-pufly-b376aa5169.json")
+                            var credential = GoogleCredential.FromFile(@"C:\Users\katana\Downloads\NotifyServer\NotifyServer\LocalNotificationsDemo\Platforms\Android\Resources\metal-ranger-379519-firebase-adminsdk-pufly-b376aa5169.json")
                                 .CreateScoped("https://www.googleapis.com/auth/firebase.messaging");
 
+                            
                             var accessToken = await credential.UnderlyingCredential.GetAccessTokenForRequestAsync();
-                            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-        
-                            var payload = new
-                            {
-                                message = new
-                                {
-                                    topic = "order_created",
-                                    data = new Dictionary<string, string>
-                                    {
-                                        { "order", JsonConvert.SerializeObject(item) }
-                                    }
-                                }
-                            };
 
-                            var json = JsonConvert.SerializeObject(payload);
-                            var content = new StringContent(json, Encoding.UTF8, "application/json");
-                            var responseMessage = await _httpClient.PostAsync($"https://fcm.googleapis.com/v1/projects/metal-ranger-379519/messages:send", content);
+                            if (accessToken != null)
+                            {
+                                _logger.LogInformation(await credential.UnderlyingCredential
+                                    .GetAccessTokenForRequestAsync());
+                                
+                                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         
-                            var contentString = await responseMessage.Content.ReadAsStringAsync();
+                                var payload = new
+                                {
+                                    message = new
+                                    {
+                                        topic = "order_created",
+                                        data = new Dictionary<string, string>
+                                        {
+                                            { "order", JsonConvert.SerializeObject(item) }
+                                        }
+                                    }
+                                };
+
+                                var json = JsonConvert.SerializeObject(payload);
+                                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                                var responseMessage = await _httpClient.PostAsync($"https://fcm.googleapis.com/v1/projects/metal-ranger-379519/messages:send", content);
+                            
+                                var contentString = await responseMessage.Content.ReadAsStringAsync();   
+                            }
+                            else
+                            {
+                                _logger.LogError("Failed to get access token");
+                            }
                         }
                     }
                     if(onlyInSecond.Count < newList.Count())
