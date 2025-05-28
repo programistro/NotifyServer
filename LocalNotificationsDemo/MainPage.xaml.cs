@@ -34,6 +34,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
     INotificationManagerService notificationManager;
     private readonly IAuthService _authService;
     private readonly IUserService _userService;
+    private readonly IOrderService _orderService;
     private readonly HttpClient _httpClient;
     private string _token = string.Empty;
     
@@ -100,6 +101,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         notificationManager = IPlatformApplication.Current.Services.GetRequiredService<INotificationManagerService>();
         _logger = IPlatformApplication.Current.Services.GetService<ILogger<MainPage>>();
         _userService = IPlatformApplication.Current.Services.GetRequiredService<IUserService>();
+        _orderService = IPlatformApplication.Current.Services.GetRequiredService<IOrderService>();
         // notificationManager.NotificationReceived += (sender, eventArgs) =>
         // {
         //     var eventData = (NotificationEventArgs)eventArgs;
@@ -234,18 +236,48 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
             }
         }
         
-        notificationManager.SendNotification("Уведомление", $"Созданно задание {order.Name}");
+        notificationManager.SendNotification("Уведомление", $"Создана новая запись {order.Name}");
     }
 
     private void OnNotificationOpened(object? sender, FirebasePushNotificationResponseEventArgs e)
     {
         _logger.LogInformation($"NotificationOpened: {e.Data}");
 
-        OpenUrl("https://re.souso.ru/");
+        OpenUrl("https://re.souso.ru/lk");
     }
 
     private void OnTokenRefresh(object? sender, FirebasePushNotificationTokenEventArgs e)
     {
         _logger.LogInformation($"TokenRefresh: {e.Token}");
+    }
+
+    private async void DeleteOrderClick(object? sender, EventArgs e)
+    {
+        var menuitem = sender as MenuItem;
+        
+        if (menuitem != null)
+        {
+            var order = menuitem.BindingContext as Order;
+            
+            var findOrder = await _orderService.GetByIdAsync(order.Id);
+
+            if (findOrder != null)
+            {
+                var itemsToRemove = _user.Orders.Where(o => o.Id == order.Id).ToList();
+                foreach (var item in itemsToRemove)
+                {
+                    _user.Orders.Remove(item);
+                }
+
+                // _user.Orders.Remove(findOrder);
+                _userService.Update(_user);
+                Orders.Remove(order);
+            }
+        }
+    }
+
+    private void OrderList_OnItemSelected(object? sender, SelectedItemChangedEventArgs e)
+    {
+        OpenUrl("https://re.souso.ru/worker");
     }
 }

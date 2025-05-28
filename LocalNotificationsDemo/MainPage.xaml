@@ -20,7 +20,7 @@
                                FontSize="16">
                                 <Label.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding OpenUrlCommand}" 
-                                                              CommandParameter="https://re.souso.ru/"/>
+                                                              CommandParameter="https://re.souso.ru/lk"/>
                                 </Label.GestureRecognizers>
                         </Label>
                         <Label Text="Войти"
@@ -37,14 +37,18 @@
     <VerticalStackLayout x:Name="verticalStackLayout"
                              Spacing="6">
 
-        <ListView x:Name="OrderList" IsVisible="{Binding !IsAuthenticated}" ItemsSource="{Binding Orders}">
+        <ListView x:Name="OrderList" IsVisible="{Binding !IsAuthenticated}" 
+                  ItemsSource="{Binding Orders}" ItemSelected="OrderList_OnItemSelected">
                 <ListView.ItemTemplate>
                         <DataTemplate>
                                 <ViewCell>
+                                        <ViewCell.ContextActions>
+                                                <MenuItem Text="Удалить" Clicked="DeleteOrderClick"/>
+                                        </ViewCell.ContextActions>
                                         <ViewCell.View>
                                                 <StackLayout>
-                                                        <Label Text="{Binding DescriptionDispathcer}" FontSize="16" />
-                                                        <Label Text="{Binding OrderNumber}" FontSize="14" />
+                                                        <Label Text="{Binding OrderNumber}" FontSize="16" />
+                                                        <Label Text="{Binding DateWorkStatus}" FontSize="14" />
                                                 </StackLayout>
                                         </ViewCell.View>
                                 </ViewCell>
