@@ -48,8 +48,6 @@ public class UserRepository : IUserRepository
             user.Orders.NormalizeDatesToUtc();
         }
         
-        //todo: check perplexity (по id найти оригинал пользователя и обновлять ему все свойсвтва
-        // _context._Employees.Attach(user);
         _context.Entry(user).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }

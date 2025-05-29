@@ -17,7 +17,7 @@ namespace NotifyNet.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -254,21 +254,21 @@ namespace NotifyNet.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("DescriptionDispathcer")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("DescriptionOfWork")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid?>("DivisionId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("EmployeeApplicantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EmployeeApplicantId1")
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("EmployeeDispatcherId")
@@ -287,7 +287,6 @@ namespace NotifyNet.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
@@ -309,6 +308,8 @@ namespace NotifyNet.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EmployeeApplicantId");
+
+                    b.HasIndex("EmployeeApplicantId1");
 
                     b.ToTable("Orders");
                 });
@@ -411,7 +412,15 @@ namespace NotifyNet.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("NotifyNet.Core.Models.Employee", "EmployeeApplicant")
+                        .WithMany()
+                        .HasForeignKey("EmployeeApplicantId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Employee");
+
+                    b.Navigation("EmployeeApplicant");
                 });
 
             modelBuilder.Entity("NotifyNet.Core.Models.Employee", b =>

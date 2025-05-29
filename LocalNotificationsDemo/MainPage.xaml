@@ -48,7 +48,7 @@
                                         <ViewCell.View>
                                                 <StackLayout>
                                                         <Label Text="{Binding OrderNumber}" FontSize="16" />
-                                                        <Label Text="{Binding DateWorkStatus}" FontSize="14" />
+                                                        <Label Text="{Binding EmployeeApplicant.UserName}" FontSize="14" />
                                                 </StackLayout>
                                         </ViewCell.View>
                                 </ViewCell>

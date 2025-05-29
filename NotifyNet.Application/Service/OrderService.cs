@@ -10,11 +10,13 @@ public class OrderService : IOrderService
 {
     private readonly IOrderRepository _orderRepository;
     private readonly ILogger<IOrderService> _logger;
+    private readonly TimeZoneInfo _timeZoneInfo;
 
     public OrderService(IOrderRepository orderRepository, ILogger<IOrderService> logger)
     {
         _orderRepository = orderRepository;
         _logger = logger;
+        _timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
     }
     
     public async Task<Order> GetByIdAsync(Guid orderId)
@@ -25,6 +27,8 @@ public class OrderService : IOrderService
         {
             return null;
         }
+        
+        findOrder.SetMoscowDate();
         
         return findOrder;
     }
@@ -42,6 +46,8 @@ public class OrderService : IOrderService
         {
             return null;
         }
+        
+        findOrder.SetMoscowDate();
         
         return findOrder;
     }
@@ -105,8 +111,48 @@ public class OrderService : IOrderService
             // EmployeeNotificationId = dto.EmployeeNotificationId,
         };
         
+        order.SetMoscowDate();
+        
         await _orderRepository.AddAsync(order);
 
         return order;
+    }
+}
+
+public static class OrderServiceExtensions
+{
+    public static void SetMoscowDate<T>(this T entity)
+    {
+        TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
+        
+        if (entity is null)
+            return;
+        
+        var properties = entity.GetType().GetProperties()
+            .Where(x => x.PropertyType == typeof(DateTime?) || x.PropertyType == typeof(DateTime));
+
+        foreach (var property in properties)
+        {
+            var value = property.GetValue(entity);
+            
+            if(value == null)
+                continue;
+
+            if (property.PropertyType == typeof(DateTime?))
+            {
+                var date = (DateTime?)value;
+                if (date.HasValue)
+                {
+                    var mscDate = TimeZoneInfo.ConvertTimeFromUtc(date.Value, timeZoneInfo);
+                    property.SetValue(entity, mscDate);
+                }
+            }
+            else if (property.PropertyType == typeof(DateTime))
+            {
+                var date = (DateTime)value;
+                var mscDate = TimeZoneInfo.ConvertTimeFromUtc(date, timeZoneInfo);
+                property.SetValue(entity, mscDate);
+            }
+        }
     }
 }
