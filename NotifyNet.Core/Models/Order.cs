@@ -93,5 +93,31 @@ namespace NotifyNet.Core.Models
 		
 		public override bool Equals(object obj) => Equals(obj as Order);
 		public override int GetHashCode() => Id.GetHashCode();
+		
+		public bool HasChanges(Order other)
+		{
+			if (other == null) return true;
+
+			return 
+				OrderNumber != other.OrderNumber ||
+				EmployeeApplicantId != other.EmployeeApplicantId ||
+				Description != other.Description ||
+				Name != other.Name ||
+				BuildingId != other.BuildingId ||
+				DateModeration != other.DateModeration ||
+				DivisionId != other.DivisionId ||
+				DescriptionDispathcer != other.DescriptionDispathcer ||
+				EquipmentId != other.EquipmentId ||
+				EventId != other.EventId ||
+				PriorityId != other.PriorityId ||
+				RecordId != other.RecordId ||
+				ProcessId != other.ProcessId ||
+				DateOfExecution != other.DateOfExecution ||
+				DateWorkStatus != other.DateWorkStatus ||
+				DescriptionOfWork != other.DescriptionOfWork ||
+				DateOfClose != other.DateOfClose ||
+				EmployeeDispatcherId != other.EmployeeDispatcherId ||
+				EmployeeExecuterId != other.EmployeeExecuterId;
+		}
 	}
 }

@@ -166,7 +166,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
         IFirebasePushNotification.Current.NotificationReceived += this.OnNotificationReceived;
         IFirebasePushNotification.Current.NotificationDeleted += this.OnNotificationDeleted;
         IFirebasePushNotification.Current.NotificationAction += this.OnNotificationAction;
-        IFirebasePushNotification.Current.SubscribeTopic("order_created");
+        IFirebasePushNotification.Current.SubscribeTopics(["order_updated, order_created"]);
         IFirebasePushNotification.Current.RegisterForPushNotificationsAsync();
         
         _logger.LogInformation("Registering notification categories");
