@@ -268,9 +268,6 @@ namespace NotifyNet.Infrastructure.Migrations
                     b.Property<Guid>("EmployeeApplicantId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("EmployeeApplicantId1")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid?>("EmployeeDispatcherId")
                         .HasColumnType("uuid");
 
@@ -308,8 +305,6 @@ namespace NotifyNet.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EmployeeApplicantId");
-
-                    b.HasIndex("EmployeeApplicantId1");
 
                     b.ToTable("Orders");
                 });
@@ -412,15 +407,7 @@ namespace NotifyNet.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NotifyNet.Core.Models.Employee", "EmployeeApplicant")
-                        .WithMany()
-                        .HasForeignKey("EmployeeApplicantId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Employee");
-
-                    b.Navigation("EmployeeApplicant");
                 });
 
             modelBuilder.Entity("NotifyNet.Core.Models.Employee", b =>

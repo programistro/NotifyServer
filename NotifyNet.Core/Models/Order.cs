@@ -13,7 +13,7 @@ namespace NotifyNet.Core.Models
 		[JsonIgnore]
 		public Employee? Employee { get; set; }
 
-		public virtual Employee EmployeeApplicant { get; set; }
+		// public virtual Employee EmployeeApplicant { get; set; }
 
 		public Guid? BuildingId { get; set; }
 

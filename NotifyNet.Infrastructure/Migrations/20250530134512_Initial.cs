@@ -132,7 +132,6 @@ namespace NotifyNet.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     OrderNumber = table.Column<int>(type: "integer", nullable: true),
                     EmployeeApplicantId = table.Column<Guid>(type: "uuid", nullable: false),
-                    EmployeeApplicantId1 = table.Column<Guid>(type: "uuid", nullable: false),
                     BuildingId = table.Column<Guid>(type: "uuid", nullable: true),
                     DivisionId = table.Column<Guid>(type: "uuid", nullable: true),
                     EquipmentId = table.Column<Guid>(type: "uuid", nullable: true),
@@ -160,12 +159,6 @@ namespace NotifyNet.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_Orders__Employees_EmployeeApplicantId",
                         column: x => x.EmployeeApplicantId,
-                        principalTable: "_Employees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Orders__Employees_EmployeeApplicantId1",
-                        column: x => x.EmployeeApplicantId1,
                         principalTable: "_Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -257,11 +250,6 @@ namespace NotifyNet.Infrastructure.Migrations
                 name: "IX_Orders_EmployeeApplicantId",
                 table: "Orders",
                 column: "EmployeeApplicantId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Orders_EmployeeApplicantId1",
-                table: "Orders",
-                column: "EmployeeApplicantId1");
         }
 
         /// <inheritdoc />
