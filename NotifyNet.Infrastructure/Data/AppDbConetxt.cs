@@ -39,11 +39,12 @@ public class AppDbConetxt : IdentityDbContext<
             .WithOne(d => d.Employee)
             .HasForeignKey(ur => ur.UserId)
             .IsRequired();
+        
         builder.Entity<Order>()
-            .HasOne(o => o.Employee)
+            .HasOne(o => o.EmployeeApplicant)
             .WithMany(e => e.Orders)
             .HasForeignKey(o => o.EmployeeApplicantId)
-            .IsRequired();
+            .IsRequired(false); 
 
         builder.Entity<Permission>().ToTable("_Permissions");
 

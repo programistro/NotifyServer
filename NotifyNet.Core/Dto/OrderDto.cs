@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using NotifyNet.Core.Models;
 
 namespace NotifyNet.Core.Dto;
 
@@ -17,7 +18,7 @@ public class OrderDto
 	/* Блок "Формирования записи" */
 	public Guid? EmployeeApplicantId { get; set; }
 
-	// public virtual Employee EmployeeApplicant { get; set; }
+	public virtual Employee EmployeeApplicant { get; set; }
 
 	public Guid? BuildingId { get; set; }
 

@@ -63,7 +63,22 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
             OnPropertyChanged(nameof(Orders));
         }
     }
+
+    private Employee _employeeApplicant;
     
+    public Employee EmployeeApplicatint
+    {
+        get
+        {
+            return _employeeApplicant;
+        }
+        set
+        {
+            _employeeApplicant = value;
+            OnPropertyChanged(nameof(EmployeeApplicatint));
+        }
+    }
+
     private bool _isAuthenticated;
     public bool IsAuthenticated
     {
@@ -139,6 +154,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var respone = await _httpClient.GetAsync($"https://api.re.souso.ru/User/get-user-by-email?email={Email}");
+            var json = await respone.Content.ReadAsStringAsync();
             _user = await respone.Content.ReadFromJsonAsync<Employee>();
 
             _user.OrdersChanged += UserOnOrdersChanged;

@@ -10,10 +10,11 @@ namespace NotifyNet.Core.Models
 		/* Блок "Формирования записи" */
 		public Guid? EmployeeApplicantId { get; set; }
 		
-		[JsonIgnore]
-		public Employee? Employee { get; set; }
+		// [JsonIgnore]
+		// public Employee? Employee { get; set; }
 
-		// public virtual Employee EmployeeApplicant { get; set; }
+		[JsonIgnore]
+		public virtual Employee EmployeeApplicant { get; set; }
 
 		public Guid? BuildingId { get; set; }
 
@@ -101,6 +102,7 @@ namespace NotifyNet.Core.Models
 			return 
 				OrderNumber != other.OrderNumber ||
 				EmployeeApplicantId != other.EmployeeApplicantId ||
+				EmployeeApplicant != other.EmployeeApplicant ||
 				Description != other.Description ||
 				Name != other.Name ||
 				BuildingId != other.BuildingId ||

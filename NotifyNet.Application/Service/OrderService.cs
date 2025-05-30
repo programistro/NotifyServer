@@ -77,7 +77,7 @@ public class OrderService : IOrderService
         Order order = new()
         {
             Id = Guid.NewGuid(),
-            EmployeeApplicantId = dto.EmployeeApplicantId,
+            EmployeeApplicant = dto.EmployeeApplicant,
             Created = dto.Created,
             // OrderChats = dto.OrderChats,
             Description = dto.Description,

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NotifyNet.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbConetxt))]
-    [Migration("20250530134512_Initial")]
+    [Migration("20250530150318_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -268,7 +268,7 @@ namespace NotifyNet.Infrastructure.Migrations
                     b.Property<Guid?>("DivisionId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("EmployeeApplicantId")
+                    b.Property<Guid?>("EmployeeApplicantId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("EmployeeDispatcherId")
@@ -404,13 +404,11 @@ namespace NotifyNet.Infrastructure.Migrations
 
             modelBuilder.Entity("NotifyNet.Core.Models.Order", b =>
                 {
-                    b.HasOne("NotifyNet.Core.Models.Employee", "Employee")
+                    b.HasOne("NotifyNet.Core.Models.Employee", "EmployeeApplicant")
                         .WithMany("Orders")
-                        .HasForeignKey("EmployeeApplicantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EmployeeApplicantId");
 
-                    b.Navigation("Employee");
+                    b.Navigation("EmployeeApplicant");
                 });
 
             modelBuilder.Entity("NotifyNet.Core.Models.Employee", b =>

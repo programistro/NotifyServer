@@ -131,7 +131,7 @@ namespace NotifyNet.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     OrderNumber = table.Column<int>(type: "integer", nullable: true),
-                    EmployeeApplicantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EmployeeApplicantId = table.Column<Guid>(type: "uuid", nullable: true),
                     BuildingId = table.Column<Guid>(type: "uuid", nullable: true),
                     DivisionId = table.Column<Guid>(type: "uuid", nullable: true),
                     EquipmentId = table.Column<Guid>(type: "uuid", nullable: true),
@@ -160,8 +160,7 @@ namespace NotifyNet.Infrastructure.Migrations
                         name: "FK_Orders__Employees_EmployeeApplicantId",
                         column: x => x.EmployeeApplicantId,
                         principalTable: "_Employees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
